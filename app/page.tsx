@@ -19,7 +19,7 @@ export default function Page() {
       { name: "Vanilla Dream", price: "₹99", desc: "Classic Madagascar vanilla", img: "https://images.unsplash.com/photo-1576506295286-5cda18df43e7?w=400&h=400&fit=crop" },
       { name: "Chocolate Fudge", price: "₹129", desc: "Dark Belgian chocolate", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=400&fit=crop" },
       { name: "Butterscotch Crunch", price: "₹129", desc: "Caramel + praline", img: "https://images.unsplash.com/photo-1488900128323-21503983a07e?w=400&h=400&fit=crop" },
-      { name: "Mango Mastani", price: "₹149", desc: "Alphonso seasonal", img: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&h=400&fit=crop" },
+      { name: "Mango Mastani", price: "₹149", desc: "Alphonso seasonal", img: "/mango-mastani.jpg?w=400&h=400&fit=crop" },
       { name: "Strawberry Swirl", price: "₹139", desc: "Fresh strawberry bits", img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400&h=400&fit=crop" },
       { name: "Pista Delight", price: "₹149", desc: "Premium pistachio", img: "https://images.unsplash.com/photo-1579954115563-e72bf1381629?w=400&h=400&fit=crop" },
     ],
@@ -34,14 +34,14 @@ export default function Page() {
       { name: "Club Veg Sandwich", price: "₹169", desc: "Triple layer", img: "https://images.unsplash.com/photo-1521390188846-e2a3a97453a0?w=400&h=400&fit=crop" },
     ],
     "Burgers 🍔": [
-      { name: "Veg Supreme Burger", price: "₹129", desc: "Aloo tikki + cheese", img: "https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=400&h=400&fit=crop" },
+      { name: "Veg Supreme Burger", price: "₹129", desc: "Aloo tikki + cheese", img: "/veg-burger.jpg?w=400&h=400&fit=crop" },
       { name: "Paneer Burger", price: "₹159", desc: "Crispy paneer patty", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=400&h=400&fit=crop" },
     ],
     "Milkshakes 🥤": [
       { name: "Cold Coffee Shake", price: "₹129", desc: "Strong + creamy", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=400&fit=crop" },
       { name: "KitKat Shake", price: "₹169", desc: "Crushed KitKat", img: "https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=400&h=400&fit=crop" },
       { name: "Oreo Shake", price: "₹159", desc: "Oreo + vanilla", img: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=400&h=400&fit=crop" },
-      { name: "Chocolate Shake", price: "₹149", desc: "Dutch chocolate", img: "https://images.unsplash.com/photo-1572490122747-d74843c9c0a3?w=400&h=400&fit=crop" },
+      { name: "Chocolate Shake", price: "₹149", desc: "Dutch chocolate", img: "/chocolate-shake.jpg?w=400&h=400&fit=crop" },
     ],
   };
 
@@ -187,14 +187,14 @@ export default function Page() {
               </div>
             </div>
           ))}
-          <footer style={{ textAlign: 'center', padding: '50px 0 100px', opacity: 0.7, fontSize: 14, color: '#0A6ED1' }}>
+          <footer style={{ textAlign: 'center', padding: '50px 0 100px', opacity: 0.7, fontSize: 17, color: '#0A6ED1' }}>
             🚗 Drive-In (after 8 P.M) | 🛵 Free Delivery | 🌐 www.blr99corner.com<br />
             © 2026 BLR 99 Corner • #41, A.J.Chambers, RV Road, Basavanagudi, Bangalore-560004<br />📞 +91 98860-67444
           </footer>
         </div>
       </section>
 
-      {/* Watermark 72px */}
+      {/* Watermark 172px */}
       <img src="/logo.png" alt="watermark" style={{ position: 'fixed', bottom: 16, right: 16, width: 72, height: 72, borderRadius: '50%', opacity: 0.15, pointerEvents: 'none', zIndex: 5, border: '2px solid #D4A017', background: 'white' }} />
     </main>
   )
