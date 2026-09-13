@@ -41,7 +41,7 @@ export default function Page() {
       { name: "Cold Coffee Shake", price: "₹129", desc: "Strong + creamy", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=400&fit=crop" },
       { name: "KitKat Shake", price: "₹169", desc: "Crushed KitKat", img: "https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=400&h=400&fit=crop" },
       { name: "Oreo Shake", price: "₹159", desc: "Oreo + vanilla", img: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=400&h=400&fit=crop" },
-      { name: "Chocolate Shake", price: "₹149", desc: "Dutch chocolate(Chef Choice)", img: "/chocolate-shake.jpg?w=400&h=400&fit=crop" },
+      { name: "Chocolate Shake", price: "₹149", desc: "Dutch chocolate(Chef Choice)", img: "/chocolate-shake.jpg?w=400&h=400&fit=crop&auto=format" },
     ],
   };
 
