@@ -92,7 +92,7 @@ export default function Page() {
           </div>
         ))}
 
-        <footer style={{ textAlign: 'center', padding: '50px 0 100px', opacity: 0.6, fontSize: 17, lineHeight: 1.6 }}>
+        <footer style={{ textAlign: 'center', padding: '50px 0 100px', opacity: 0.6, fontSize: 27, lineHeight: 1.6 }}>
           <div style={{ marginBottom: 10 }}>🚗 Drive-In Service Available | 🛵 Free Home Delivery | 🌐 www.blr99corner.com</div>
           © 2026 BLR 99 Corner Icecream Boutique • 100% VEG • Made with love in Bangalore<br />
           📞 +91 98860-67444
