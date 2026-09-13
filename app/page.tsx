@@ -62,7 +62,7 @@ export default function Page() {
       {/* Hero */}
       <section style={{ maxWidth: 1120, margin: '0 auto', padding: '28px 24px 12px', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 24, alignItems: 'center', position: 'relative', zIndex: 1 }}>
         <div style={{ background: 'rgba(255,255,255,0.92)', borderRadius: 28, padding: 32, boxShadow: '0 10px 30px rgba(10,110,209,0.08)', borderLeft: '6px solid #0FA3B1', borderTop: '1px solid #D4A017' }}>
-          <span style={{ background: 'linear-gradient(90deg, #0A6ED1, #0FA3B1)', color: 'white', padding: '6px 14px', borderRadius: 999, fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>100% VEG • FIJI BLUE PREMIUM</span>
+          <span style={{ background: 'linear-gradient(90deg, #0A6ED1, #0FA3B1)', color: 'white', padding: '6px 14px', borderRadius: 999, fontSize: 11, fontWeight: 800, letterSpacing: '1px' }}>100% VEG • Fresh Always..</span>
           <h2 style={{ fontSize: 42, lineHeight: 1.05, margin: '18px 0 12px', fontWeight: 900, color: '#0A6ED1' }}>
             Scoops of Happiness,<br /><span style={{ color: '#0FA3B1' }}>Right at the Corner.</span>
           </h2>
@@ -109,7 +109,7 @@ export default function Page() {
         </footer>
       </section>
 
-      {/* Logo Bottom Right Watermark 72px */}
+      {/* Logo Bottom Right Watermark 172px */}
       <img src="/logo.png" alt="watermark" style={{ position: 'fixed', bottom: 16, right: 16, width: 72, height: 72, borderRadius: '50%', opacity: 0.18, pointerEvents: 'none', zIndex: 5, border: '2px solid #D4A017', background: 'white' }} />
     </main>
   )
