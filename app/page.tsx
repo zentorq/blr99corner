@@ -1,106 +1,106 @@
-export default function Page() {
-  const phone = "+919886067444";
-  
-  const menu = {
-    "Icecreams 🍦": [
-      { name: "Vanilla Dream", price: "₹99", desc: "Classic Madagascar vanilla" },
-      { name: "Chocolate Fudge", price: "₹129", desc: "Dark Belgian chocolate" },
-      { name: "Butterscotch Crunch", price: "₹129", desc: "Caramel + praline" },
-      { name: "Mango Mastani", price: "₹149", desc: "Alphonso seasonal" },
-      { name: "Strawberry Swirl", price: "₹139", desc: "Fresh strawberry bits" },
-      { name: "Pista Delight", price: "₹149", desc: "Premium pistachio" },
-    ],
-    "Waffles 🧇": [
-      { name: "Nutella Berry Waffle", price: "₹199", desc: "Strawberry, blueberry, Nutella" },
-      { name: "Classic Honey Waffle", price: "₹149", desc: "Whipped cream + honey" },
-      { name: "Choco Overload Waffle", price: "₹219", desc: "Triple chocolate" },
-    ],
-    "Sandwiches 🥪": [
-      { name: "Veg Grilled Sandwich", price: "₹119", desc: "Cheese + veggies" },
-      { name: "Paneer Tikka Sandwich", price: "₹149", desc: "Spicy paneer + mint" },
-      { name: "Club Veg Sandwich", price: "₹169", desc: "Triple layer" },
-    ],
-    "Burgers 🍔": [
-      { name: "Veg Supreme Burger", price: "₹129", desc: "Aloo tikki + cheese" },
-      { name: "Paneer Burger", price: "₹159", desc: "Crispy paneer patty" },
-    ],
-    "Milkshakes 🥤": [
-      { name: "Cold Coffee Shake", price: "₹129", desc: "Strong + creamy" },
-      { name: "KitKat Shake", price: "₹169", desc: "Crushed KitKat" },
-      { name: "Oreo Shake", price: "₹159", desc: "Oreo + vanilla" },
-      { name: "Chocolate Shake", price: "₹149", desc: "Dutch chocolate" },
-    ],
-  };
+'use client';
+import { useState } from 'react';
 
+const menu = [
+  { cat: 'Signature Scoops - ₹99', items: [
+    { name: 'Fiji Blue Vanilla', desc: 'Madagascar vanilla with Fiji blue swirl', price: '99', tag: 'BESTSELLER' },
+    { name: 'Teal Mint Choco', desc: 'Fresh mint with dark choco chips', price: '99' },
+    { name: 'Beige Butterscotch', desc: 'Caramelized butterscotch crunch', price: '99' },
+    { name: 'Golden Mango', desc: 'Alphonso mango with gold dust', price: '99' },
+    { name: 'Cyan Pista', desc: 'Royal pistachio with cyan candy', price: '99' },
+  ]},
+  { cat: 'Waffle Cones & Sundaes', items: [
+    { name: 'BLR 99 Special Sundae', desc: '3 scoops + beige waffle + gold sprinkles', price: '149' },
+    { name: 'Fiji Tropic Cone', desc: 'Teal & cyan double scoop in beige cone', price: '129' },
+    { name: 'Gold Choco Overload', desc: 'Triple chocolate with gold flakes', price: '149' },
+  ]},
+  { cat: 'Shakes & Coolers', items: [
+    { name: 'Fiji Blue Lagoon Shake', desc: 'Blue vanilla shake', price: '99' },
+    { name: 'Teal Mint Cooler', desc: 'Icy mint lime', price: '79' },
+  ]},
+];
+
+export default function Page() {
   return (
-    <main style={{ minHeight: '100vh', background: '#fff8f0', color: '#2d1a0e', fontFamily: 'system-ui, sans-serif', position: 'relative' }}>
-      {/* Header with Logo Top Left */}
-      <header style={{ padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 1120, margin: '0 auto', position: 'sticky', top: 0, background: 'rgba(255,248,240,0.9)', backdropFilter: 'blur(10px)', zIndex: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <img src="/logo.png" alt="BLR 99 Corner" style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', border: '2px solid #4a2c0a' }} />
+    <div style={{
+      minHeight: '100vh',
+      background: `linear-gradient(rgba(245,232,201,0.88), rgba(255,255,255,0.92)), url('/icecream-bg.png')`,
+      backgroundSize: 'cover',
+      backgroundAttachment: 'fixed',
+      backgroundPosition: 'center',
+      fontFamily: "'Outfit', system-ui, sans-serif",
+    }}>
+      {/* HEADER - 150px Circle Logo Top Left */}
+      <header style={{
+        background: 'linear-gradient(90deg, #0A6ED1 0%, #0FA3B1 100%)',
+        padding: '12px 28px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderBottom: '4px solid #D4A017',
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        boxShadow: '0 4px 20px rgba(10,110,209,0.25)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+          <img src="/logo.png" alt="BLR 99 Corner" 
+            style={{ width: 150, height: 150, borderRadius: '50%', border: '4px solid #D4A017', boxShadow: '0 6px 20px rgba(0,0,0,0.25)', objectFit: 'cover', background: 'white' }} />
           <div>
-            <h1 style={{ fontSize: 18, fontWeight: 900, margin: 0, lineHeight: 1 }}>BLR 99 CORNER</h1>
-            <span style={{ fontSize: 12, opacity: 0.7, fontWeight: 600 }}>100% VEG • Icecream Boutique</span>
+            <h1 style={{ color: '#F5E8C9', margin: 0, fontSize: '32px', fontWeight: 900, letterSpacing: '1px', lineHeight: 1 }}>BLR 99 CORNER</h1>
+            <p style={{ color: '#2EC4B6', margin: '4px 0 0 0', fontWeight: 700, letterSpacing: '2px', fontSize: '13px' }}>FIJI BLUE • TEAL • BEIGE • GOLD • CYAN</p>
+            <p style={{ color: 'rgba(245,232,201,0.9)', margin: '2px 0 0 0', fontSize: '12px' }}>Tropical Scoops • Gold Standard Taste</p>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <span style={{ display: 'none', fontSize: 12, fontWeight: 700, background: 'white', padding: '6px 10px', borderRadius: 999, border: '1px solid #eee' }} className="md:block">DRIVE-IN | FREE DELIVERY</span>
-          <a href={`https://wa.me/${phone}?text=Hi%20BLR99%20Corner%2C%20I%20want%20to%20order`} style={{ background: '#2d1a0e', color: 'white', padding: '10px 18px', borderRadius: 999, textDecoration: 'none', fontWeight: 700, fontSize: 14 }}>Order on WhatsApp</a>
-        </div>
+        <div style={{ background: '#D4A017', color: '#0A6ED1', padding: '8px 16px', borderRadius: '20px', fontWeight: 800, fontSize: '12px' }}>OPEN • ₹99 MENU</div>
       </header>
 
-      {/* Hero */}
-      <section style={{ maxWidth: 1120, margin: '0 auto', padding: '24px 24px 12px', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 20, alignItems: 'center' }}>
-        <div style={{ background: 'white', borderRadius: 28, padding: 36, boxShadow: '0 10px 30px rgba(0,0,0,0.06)' }}>
-          <span style={{ background: '#e6f9e6', color: '#0a5c0a', padding: '6px 12px', borderRadius: 999, fontSize: 12, fontWeight: 800 }}>100% VEG • www.blr99corner.com</span>
-          <h2 style={{ fontSize: 44, lineHeight: 1.05, margin: '16px 0 12px', fontWeight: 900 }}>
-            Scoops of Happiness,<br />Right at the Corner.
-          </h2>
-          <p style={{ fontSize: 17, opacity: 0.7, margin: '0 0 24px', lineHeight: 1.5 }}>
-            Icecreams, Waffles, Sandwiches, Burgers & Milkshakes — made fresh daily in Bangalore. Drive-in available + Free Home Delivery.
-          </p>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <a href={`tel:${phone}`} style={{ background: '#2d1a0e', color: 'white', padding: '14px 22px', borderRadius: 12, textDecoration: 'none', fontWeight: 700 }}>📞 {phone}</a>
-            <a href="#menu" style={{ background: '#ffe4ec', color: '#b91c4a', padding: '14px 22px', borderRadius: 12, textDecoration: 'none', fontWeight: 700 }}>View Full Menu ↓</a>
-          </div>
-        </div>
-        <div style={{ display: 'grid', placeItems: 'center' }}>
-          <img src="/logo.png" alt="BLR 99 Corner Hero" style={{ width: '100%', maxWidth: 480, aspectRatio: '1', borderRadius: '50%', objectFit: 'cover', boxShadow: '0 20px 60px rgba(0,0,0,0.15)', border: '8px solid #4a2c0a' }} />
-        </div>
-      </section>
+      {/* HERO STRIP */}
+      <div style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(6px)', padding: '18px', textAlign: 'center', borderBottom: '1px solid rgba(212,160,23,0.2)' }}>
+        <h2 style={{ margin: 0, color: '#0A6ED1', fontWeight: 800 }}>Inviting • Creamy • Tropical • Premium Ice Cream Experience</h2>
+        <p style={{ margin: '4px 0 0 0', color: '#0FA3B1' }}>Crafted with Fiji blue vibes, teal freshness, beige creaminess & gold luxury</p>
+      </div>
 
-      {/* Menu */}
-      <section id="menu" style={{ maxWidth: 1120, margin: '0 auto', padding: '24px' }}>
-        {Object.entries(menu).map(([cat, items]) => (
-          <div key={cat} style={{ marginTop: 36 }}>
-            <h3 style={{ fontSize: 22, fontWeight: 900, margin: '0 0 14px' }}>{cat}</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 14 }}>
-              {items.map((it) => (
-                <div key={it.name} style={{ background: 'white', borderRadius: 20, padding: 18, boxShadow: '0 6px 20px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <div>
-                    <div style={{ width: 44, height: 44, borderRadius: 12, background: '#fff0f5', marginBottom: 10, display: 'grid', placeItems: 'center', fontSize: 22 }}>🍧</div>
-                    <div style={{ fontWeight: 800, fontSize: 15 }}>{it.name}</div>
-                    <div style={{ opacity: 0.6, fontSize: 12, marginTop: 4, lineHeight: 1.3 }}>{it.desc}</div>
-                  </div>
-                  <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 900, fontSize: 15 }}>{it.price}</span>
-                    <a href={`https://wa.me/${phone}?text=I%20want%20to%20order%20${encodeURIComponent(it.name)}`} style={{ fontSize: 12, fontWeight: 800, background: '#2d1a0e', color: 'white', padding: '6px 10px', borderRadius: 999, textDecoration: 'none' }}>Add</a>
+      {/* MENU */}
+      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 18px 100px 18px' }}>
+        {menu.map((section) => (
+          <div key={section.cat} style={{ marginBottom: '28px' }}>
+            <h2 style={{ color: '#0A6ED1', borderLeft: '6px solid #D4A017', paddingLeft: '12px', background: 'rgba(255,255,255,0.8)', display: 'inline-block', padding: '6px 14px', borderRadius: '0 12px 12px 0', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>{section.cat}</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', marginTop: '14px' }}>
+              {section.items.map((item) => (
+                <div key={item.name} style={{
+                  background: 'rgba(255,255,255,0.94)',
+                  borderRadius: '18px',
+                  padding: '18px',
+                  borderLeft: '5px solid #0FA3B1',
+                  borderTop: '1px solid #D4A017',
+                  boxShadow: '0 6px 20px rgba(10,110,209,0.10)',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  {item.tag && <span style={{ position: 'absolute', top: '10px', right: '10px', background: '#D4A017', color: 'white', fontSize: '10px', fontWeight: 800, padding: '3px 8px', borderRadius: '10px' }}>{item.tag}</span>}
+                  <h3 style={{ margin: '0 0 4px 0', color: '#0A6ED1', fontWeight: 800 }}>{item.name}</h3>
+                  <p style={{ margin: '0 0 10px 0', color: '#5a6d7e', fontSize: '13px', lineHeight: 1.4 }}>{item.desc}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#D4A017', fontWeight: 900, fontSize: '18px' }}>₹{item.price}</span>
+                    <span style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'linear-gradient(135deg, #0FA3B1, #2EC4B6)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800 }}>+</span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         ))}
+      </div>
 
-        <footer style={{ textAlign: 'center', padding: '50px 0 100px', opacity: 0.6, fontSize: 20, lineHeight: 1.6 }}>
-          <div style={{ marginBottom: 10 }}>🚗 Drive-In Service Available | 🛵 Free Home Delivery | 🌐 www.blr99corner.com</div>
-          © 2026 BLR 99 Corner Icecream Boutique • 100% VEG • Made with love in Bangalore<br />
-          📞 +91 98860-67444
-        </footer>
-      </section>
+      {/* WATERMARK Bottom Right - 72px */}
+      <div style={{ position: 'fixed', bottom: 18, right: 18, opacity: 0.14, zIndex: 0, pointerEvents: 'none' }}>
+        <img src="/logo.png" alt="watermark" style={{ width: 72, height: 72, borderRadius: '50%', border: '2px solid #D4A017' }} />
+      </div>
 
-      {/* Logo Bottom Right Watermark */}
-      <img src="/logo.png" alt="watermark" style={{ position: 'fixed', bottom: 16, right: 16, width: 72, height: 72, borderRadius: '50%', opacity: 0.18, pointerEvents: 'none', zIndex: 5, border: '2px solid #4a2c0a' }} />
-    </main>
-  )
+      {/* FOOTER */}
+      <footer style={{ background: '#0A6ED1', color: '#F5E8C9', textAlign: 'center', padding: '16px', borderTop: '4px solid #D4A017' }}>
+        <p style={{ margin: 0, fontWeight: 700 }}>© BLR 99 Corner — Fiji Blue • Teal • Beige • Gold • Cyan</p>
+      </footer>
+    </div>
+  );
 }
