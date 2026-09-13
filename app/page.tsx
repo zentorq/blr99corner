@@ -1,9 +1,9 @@
-export default function Page() {
+export default function Home() {
   return (
-    <main style={{ padding: 20, fontFamily: 'sans-serif' }}>
-      <h1>BLR99 Corner - Live ✅</h1>
-      <p>Website is working!</p>
-      <p>Build fixed on Sep 13</p>
+    <main style={{padding: 40, fontFamily: 'sans-serif'}}>
+      <h1>blr99corner</h1>
+      <p>Ice-cream, Waffle Mix, Burger, Sandwich, MilkShakes</p>
+      <p>Coming Soon in Bangalore!</p>
     </main>
   )
 }
