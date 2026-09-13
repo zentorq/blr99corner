@@ -51,7 +51,7 @@ export default function Page() {
           <div>
             <h1 style={{ fontSize: 22, fontWeight: 900, margin: 0, lineHeight: 1, color: '#F5E8C9' }}>BLR 99 CORNER</h1>
             <span style={{ fontSize: 12, fontWeight: 700, color: '#2EC4B6', letterSpacing: '1px' }}>100% VEG • Icecream Boutique</span>
-            <div style={{ fontSize: 11, color: 'rgba(245,232,201,0.9)', marginTop: 2 }}>Fiji Blue • Teal • Beige • Gold • Cyan</div>
+            <div style={{ fontSize: 11, color: 'rgba(245,232,201,0.9)', marginTop: 2 }}>Taste Our IceCream once • Experience the Difference.</div>
           </div>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -103,9 +103,9 @@ export default function Page() {
             </div>
           </div>
         ))}
-        <footer style={{ textAlign: 'center', padding: '50px 0 100px', opacity: 0.7, fontSize: 13, lineHeight: 1.6, color: '#0A6ED1' }}>
-          <div style={{ marginBottom: 10, fontWeight: 700 }}>🚗 Drive-In | 🛵 Free Delivery | 🌐 www.blr99corner.com</div>
-          © 2026 BLR 99 Corner • Fiji Blue • Teal • Beige • Gold • Cyan • 100% VEG<br />📞 +91 98860-67444
+        <footer style={{ textAlign: 'center', padding: '50px 0 100px', opacity: 0.7, fontSize: 17, lineHeight: 1.6, color: '#0A6ED1' }}>
+          <div style={{ marginBottom: 10, fontWeight: 700 }}>🚗 Drive-In(after 8 P.M) | 🛵 Free Delivery | 🌐 www.blr99corner.com</div>
+          © 2026 BLR 99 Corner - 100% VEG • #41, A.J.Chambers, RV Road, BasavanGudi, Bangalore-560004 • <br />📞 +91 98860-67444
         </footer>
       </section>
 
