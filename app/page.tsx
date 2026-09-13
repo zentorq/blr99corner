@@ -19,7 +19,7 @@ export default function Page() {
       { name: "Vanilla Dream", price: "₹99", desc: "Classic Madagascar vanilla", img: "https://images.unsplash.com/photo-1576506295286-5cda18df43e7?w=400&h=400&fit=crop" },
       { name: "Chocolate Fudge", price: "₹129", desc: "Dark Belgian chocolate", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=400&fit=crop" },
       { name: "Butterscotch Crunch", price: "₹129", desc: "Caramel + praline", img: "https://images.unsplash.com/photo-1488900128323-21503983a07e?w=400&h=400&fit=crop" },
-      { name: "Mango Mastani", price: "₹149", desc: "Alphonso seasonal", img: "/mango-mastani.jpg?w=400&h=400&fit=crop" },
+      { name: "Mango Mastani", price: "₹149", desc: "Alphonso seasonal", img: "/mango-mastani.jpg?w=400&h=400&fit=crop&auto=format" },
       { name: "Strawberry Swirl", price: "₹139", desc: "Fresh strawberry bits", img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400&h=400&fit=crop" },
       { name: "Pista Delight", price: "₹149", desc: "Premium pistachio", img: "https://images.unsplash.com/photo-1579954115563-e72bf1381629?w=400&h=400&fit=crop" },
     ],
@@ -34,14 +34,14 @@ export default function Page() {
       { name: "Club Veg Sandwich", price: "₹169", desc: "Triple layer", img: "https://images.unsplash.com/photo-1521390188846-e2a3a97453a0?w=400&h=400&fit=crop" },
     ],
     "Burgers 🍔": [
-      { name: "Veg Supreme Burger", price: "₹129", desc: "Aloo tikki + cheese", img: "/veg-burger.jpg?w=400&h=400&fit=crop" },
+      { name: "Veg Supreme Burger", price: "₹129", desc: "Aloo tikki + cheese", img: "/veg-burger.jpg?w=400&h=400&fit=crop&auto=format" },
       { name: "Paneer Burger", price: "₹159", desc: "Crispy paneer patty", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=400&h=400&fit=crop" },
     ],
     "Milkshakes 🥤": [
       { name: "Cold Coffee Shake", price: "₹129", desc: "Strong + creamy", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=400&fit=crop" },
       { name: "KitKat Shake", price: "₹169", desc: "Crushed KitKat", img: "https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=400&h=400&fit=crop" },
       { name: "Oreo Shake", price: "₹159", desc: "Oreo + vanilla", img: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=400&h=400&fit=crop" },
-      { name: "Chocolate Shake", price: "₹149", desc: "Dutch chocolate", img: "/chocolate-shake.jpg?w=400&h=400&fit=crop" },
+      { name: "Chocolate Shake", price: "₹149", desc: "Dutch chocolate", img: "/chocolate-shake.jpg?w=400&h=400&fit=crop&auto=format" },
     ],
   };
 
