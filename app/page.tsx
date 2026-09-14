@@ -96,7 +96,7 @@ export default function Page() {
   }, []);
 
   const order = (name = '') =>
-    `https://wa.me/${phone}?text=${encodeURIComponent(name ? `Hi BLR 99 Corner, I want ${name}` : 'Hi BLR 99 Corner')}`;
+    `https://wa.me/${phone}?text=${encodeURIComponent(name ? `Hi BLR 99 Corner, I want to order.. ${name}` : 'Hi BLR 99 Corner')}`;
 
   return (
     <main className="site">
@@ -267,7 +267,10 @@ export default function Page() {
       <section id="menu">
         <div className="section-wrap">
           <h2 className="section-title">Our Menu</h2>
-          <p className="section-lead">Your attached BLR 99 Corner menu artwork is used as the visual reference for the food imagery, with category-specific images instead of repeating one unrelated photo.</p>
+          <p className="section-lead">Scoop. Sip. Bite. Play. Repeat! 🎉
+Whether you’re here for a quick scoop, a loaded sundae, a cheesy bite or a fun hangout with friends and family, BLR 99 Corner has something delicious waiting for you.
+
+Come hungry. Leave happy! 💚🍨.</p>
 
           {Object.entries(menu).map(([category, items]) => (
             <div className="menu-category" key={category}>
@@ -345,7 +348,7 @@ export default function Page() {
               <h3 style={{marginTop:0,color:'#ffe3a3'}}>Visit / Contact</h3>
               <p>🚗 Drive-In Service Available</p>
               <p>🛵 Free Home Delivery</p>
-              <p>📞 +91 98860-45674</p>
+              <p>📞 +91 98860-67444</p>
               <p>🌐 www.blr99corner.com</p>
               <p>📍 #41, A.J.Chambers, RV Road, Basavanagudi, Bangalore-560004</p>
               <a className="btn" style={{background:'#25d366',color:'#073d2c',marginTop:7}} href={order()} target="_blank" rel="noreferrer">Join WhatsApp / Order</a>
