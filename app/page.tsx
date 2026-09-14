@@ -135,18 +135,24 @@ export default function Page() {
   };
 
   const orderOnWhatsApp = () => {
-    if (!cart.length) return;
     const lines = cart.map((item) => `• ${item.name} x${item.qty} — ₹${item.price * item.qty}`);
-    const message = [
-      'Hi BLR 99 Corner! 👋',
-      '',
-      'I would like to order:',
-      ...lines,
-      '',
-      `Subtotal: ₹${subtotal}`,
-      '',
-      'Please confirm my order. Thank you! 🍦',
-    ].join('\n');
+    const message = cart.length
+      ? [
+          'Hi BLR 99 Corner! 👋',
+          '',
+          'I would like to order:',
+          ...lines,
+          '',
+          `Subtotal: ₹${subtotal}`,
+          '',
+          'Please confirm my order. Thank you! 🍦',
+        ].join('\n')
+      : [
+          'Hi BLR 99 Corner! 👋',
+          '',
+          'I would like to place an order. Please help me with the available options. 🍦',
+        ].join('\n');
+
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
   };
 
@@ -271,7 +277,7 @@ export default function Page() {
               <span><div className="brand-title">BLR 99 CORNER</div><div className="brand-sub">100% VEG • Icecream Boutique</div></span>
             </a>
             <div className="navlinks"><button className="nav-button" onClick={() => setActivePage('home')}>Home</button><a href="#menu" onClick={() => setActivePage('home')}>Menu</a><button className="nav-button" onClick={() => setActivePage('about')}>About</button><a href="#contact" onClick={() => setActivePage('home')}>Contact</a></div>
-            <button className="whatsapp" onClick={orderOnWhatsApp} disabled={!cart.length} style={{ opacity: cart.length ? 1 : .75 }}>
+            <button className="whatsapp" onClick={orderOnWhatsApp}>
               💬 Order on WhatsApp {cart.length ? `(${cartCount})` : ''}
             </button>
           </nav>
