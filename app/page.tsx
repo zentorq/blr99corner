@@ -70,10 +70,10 @@ const menu: Record<string, MenuItem[]> = {
   ],
   'Waffle Mixes 🧇': [
     { name: 'Honey', price: 80, desc: 'With icecream ₹80 • Without icecream ₹60', img: cdn('photo-1562376552-0d160a2f238d') },
-    { name: 'Coco', price: 95, desc: 'With icecream ₹95 • Without icecream ₹75', img: cdn('photo-1562376552-0d160a2f238d') },
-    { name: 'Nutrella', price: 105, desc: 'With icecream ₹105 • Without icecream ₹85', img: cdn('photo-1562376552-0d160a2f238d') },
-    { name: 'Oreo', price: 95, desc: 'With icecream ₹95 • Without icecream ₹75', img: cdn('photo-1562376552-0d160a2f238d') },
-    { name: 'Fruit & Honey', price: 95, desc: 'With icecream ₹95 • Without icecream ₹75', img: cdn('photo-1562376552-0d160a2f238d') },
+    { name: 'Coco', price: 95, desc: 'With icecream ₹95 • Without icecream ₹75', img: cdn('photo-1571115177098-24ec42ed204d') },
+    { name: 'Nutrella', price: 105, desc: 'With icecream ₹105 • Without icecream ₹85', img: cdn('photo-1519869325930-281384150729') },
+    { name: 'Oreo', price: 95, desc: 'With icecream ₹95 • Without icecream ₹75', img: cdn('photo-1590080875515-8a3a8dc5735e') },
+    { name: 'Fruit & Honey', price: 95, desc: 'With icecream ₹95 • Without icecream ₹75', img: cdn('photo-1506084868230-bb9d95c24759') },
   ],
   'Sundaes 🍨': [
     { name: 'Hot Chocolate Fudge Sundae', price: 110, desc: '2 scoops Vanilla, chocolate fudge sauce, peanuts', img: cdn('photo-1563805042-7684c019e1cb') },
@@ -401,7 +401,7 @@ export default function Page() {
             </div>
 
             <div className="about-story">
-              <div className="about-image"><img src={cdn('photo-1554118811-1e0d58224f31')} alt="Warm and welcoming café interior" loading="lazy" /></div>
+              <div className="about-image"><img src={'https://images.unsplash.com/photo-1554118811-1e0d58224f31?auto=format&fit=crop&w=1200&q=85'} alt="Warm and welcoming café interior" /></div>
               <div className="about-copy">
                 <h2>Our Happy Corner</h2>
                 <p>BLR 99 Corner is designed around one simple idea: <strong>good food should put a smile on your face.</strong> Whether you drop in for a quick scoop, meet friends for a milkshake, bring the family for a sundae or stop by for a savoury bite, we want every visit to feel easy, cheerful and memorable.</p>
@@ -420,6 +420,8 @@ export default function Page() {
             <div className="about-grid" style={{ marginTop: 22 }}>
               <div className="about-card"><div className="about-icon">🐾</div><h3>Treat Your Pets</h3><p>We love making the experience enjoyable for the whole family, including your four-legged companions.</p></div>
               <div className="about-card"><div className="about-icon">🧸</div><h3>Kids’ Play Area</h3><p>A fun space for little ones to play while families enjoy their time together.</p></div>
+              <div className="about-card"><div className="about-icon">🎯</div><h3>Games for Adults</h3><p><strong>Fun Isn’t Just for Kids!</strong><br />Challenge your friends, test your skills and enjoy exciting games made for grown-ups too.</p></div>
+              <div className="about-card"><div className="about-icon">🍨</div><h3>Sugar-Free Ice Cream</h3><p>Enjoy a delicious treat without the added sugar — a special option for people with diabetes.</p></div>
               <div className="about-card"><div className="about-icon">📲</div><h3>Stay Connected</h3><p>Join our WhatsApp community and follow @blr99corner for offers, updates and sweet surprises.</p></div>
             </div>
           </section>
