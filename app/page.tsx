@@ -385,12 +385,12 @@ export default function Page() {
         ) : (
           <section className="about-page" id="about">
             <div className="about-hero">
-              <span className="eyebrow">WELCOME TO BLR 99 CORNER</span>
+              <span className="eyebrow">WELCOME TO BLR 99 CORNER ICECREAM ATELIER</span>
               <h1>About Us 💜🍦</h1>
               <p>We believe an ice cream café should be more than a place to grab a scoop — it should be a happy little corner where families, friends and food lovers can relax, connect and create sweet memories.</p>
               <div className="about-actions">
                 <button className="whatsapp" onClick={() => setActivePage('home')}>🍨 Explore Our Menu</button>
-                <a className="outline" href={`tel:${phone}`}>📞 Call BLR 99 Corner</a>
+                <a className="outline" href={`tel:${phone}`}>📞 Call BLR 99 Corner ICECREAM..</a>
               </div>
             </div>
 
@@ -401,7 +401,7 @@ export default function Page() {
             </div>
 
             <div className="about-story">
-              <div className="about-image"><img src={'https://images.unsplash.com/photo-1554118811-1e0d58224f31?auto=format&fit=crop&w=1200&q=85'} alt="Warm and welcoming café interior" /></div>
+              <div className="about-image"><img src={'/blr99/cafe-interior.jpg'} alt="OUR Warm and welcoming café interior" /></div>
               <div className="about-copy">
                 <h2>Our Happy Corner</h2>
                 <p>BLR 99 Corner is designed around one simple idea: <strong>good food should put a smile on your face.</strong> Whether you drop in for a quick scoop, meet friends for a milkshake, bring the family for a sundae or stop by for a savoury bite, we want every visit to feel easy, cheerful and memorable.</p>
@@ -412,7 +412,7 @@ export default function Page() {
                   <div className="about-point">👨‍👩‍👧‍👦 Family Friendly</div>
                   <div className="about-point">💜 Made with Happiness</div>
                   <div className="about-point">🛵 Free Home Delivery</div>
-                  <div className="about-point">🚗 Drive-In Service</div>
+                  <div className="about-point">🚗 Drive-In Service(AFTER 8 P.M)</div>
                 </div>
               </div>
             </div>
@@ -430,7 +430,7 @@ export default function Page() {
         <footer id="contact" className="footer">
           <div className="footer-inner">
             <h2>Good Food. Happy Mood. 💜</h2>
-            <p>🚗 Drive-In Service Available &nbsp; • &nbsp; 🛵 Free Home Delivery</p>
+            <p>🚗 Drive-In Service Available (AFTER 8P.M) &nbsp; • &nbsp; 🛵 Free Home Delivery</p>
             <p>#41, A.J. Chambers, RV Road, Basavanagudi, Bangalore-560004</p>
             <p>📞 +91 98860-67444 &nbsp; • &nbsp; 🌐 www.blr99corner.com</p>
             <div className="social"><a href="https://www.instagram.com/blr99corner" target="_blank" rel="noreferrer">Instagram @blr99corner</a><a href="https://www.facebook.com/blr99corner" target="_blank" rel="noreferrer">Facebook /blr99corner</a></div>
