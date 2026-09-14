@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 type MenuItem = {
   name: string;
@@ -108,6 +108,28 @@ export default function Page() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [activePage, setActivePage] = useState<'home' | 'about'>('home');
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShowScrollTop(window.scrollY > 280);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const goToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const goHome = () => {
+    setActivePage('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const goToMenu = () => {
+    setActivePage('home');
+    window.setTimeout(() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 0);
+  };
 
   const cartCount = useMemo(() => cart.reduce((sum, item) => sum + item.qty, 0), [cart]);
   const subtotal = useMemo(() => cart.reduce((sum, item) => sum + item.price * item.qty, 0), [cart]);
@@ -185,8 +207,7 @@ export default function Page() {
         .about-points { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
         .about-point { background:linear-gradient(135deg,#f0e9ff,#e1fffc); border-radius:15px; padding:12px; font-size:12px; font-weight:850; color:#51449a; }
         .about-actions { margin-top:24px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
-        .nav-button { border:0; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:13px; padding:10px 12px; border-radius:999px; cursor:pointer; }
-        .nav-button:hover { background:#e4faf8; }
+        .nav-button { border:0; background:transparent; color:var(--ink); font:inherit; cursor:pointer; }
         @media (max-width:980px) { .about-grid{grid-template-columns:1fr 1fr}.about-story{grid-template-columns:1fr} }
         @media (max-width:620px) { .about-page{padding:28px 14px 60px}.about-hero{padding:28px 21px;border-radius:25px}.about-hero p{font-size:14px}.about-grid{grid-template-columns:1fr}.about-copy{padding:25px}.about-points{grid-template-columns:1fr}.about-image{min-height:270px} }
         .topbar { position:sticky; top:0; z-index:30; backdrop-filter:blur(18px); background:rgba(250,247,255,.88); border-bottom:1px solid rgba(117,87,199,.16); box-shadow:0 8px 30px rgba(74,50,130,.08); }
@@ -196,9 +217,11 @@ export default function Page() {
         .brand-title { font-size:18px; font-weight:950; letter-spacing:.02em; }
         .brand-sub { font-size:11px; font-weight:750; color:#6c62a7; margin-top:3px; }
         .navlinks { display:flex; align-items:center; gap:8px; }
-        .navlinks a { text-decoration:none; color:var(--ink); font-weight:800; font-size:13px; padding:10px 12px; border-radius:999px; }
-        .navlinks a:hover { background:#e4faf8; }
-        .whatsapp { border:0; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; background:linear-gradient(100deg,#0b9f9c,#20c9c0); color:white; font-weight:900; padding:12px 18px; border-radius:999px; box-shadow:0 9px 24px rgba(11,159,156,.23); }
+        .navlinks a,.nav-button { text-decoration:none; color:var(--ink); font-weight:800; font-size:13px; padding:10px 12px; border-radius:999px; transition:transform .22s ease, box-shadow .22s ease, background .22s ease, color .22s ease; }
+        .navlinks a:hover,.nav-button:hover { background:#e4faf8; transform:translateY(-3px); box-shadow:0 8px 18px rgba(11,159,156,.13); }
+        .whatsapp { border:0; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; background:linear-gradient(100deg,#0b9f9c,#20c9c0); color:white; font-weight:900; padding:12px 18px; border-radius:999px; box-shadow:0 9px 24px rgba(11,159,156,.23); transition:transform .22s ease, box-shadow .22s ease, filter .22s ease; }
+        .whatsapp:hover { transform:translateY(-4px) scale(1.025); box-shadow:0 14px 30px rgba(11,159,156,.34); filter:saturate(1.08); }
+        .whatsapp:active,.outline:active,.social a:active,.mobile-cart:active { transform:translateY(0) scale(.98); }
         .hero { max-width:1220px; margin:auto; padding:58px 22px 34px; display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:center; }
         .hero-copy { background:rgba(255,255,255,.78); border:1px solid rgba(117,87,199,.16); border-radius:34px; padding:40px; box-shadow:0 22px 65px rgba(80,56,145,.12); }
         .eyebrow { display:inline-block; padding:7px 13px; border-radius:999px; background:#d9fffc; color:#087d79; font-size:11px; font-weight:900; letter-spacing:.06em; }
@@ -206,7 +229,8 @@ export default function Page() {
         .hero h1 span { color:#079e9b; }
         .hero p { max-width:640px; margin:0; color:#565b85; font-size:17px; line-height:1.65; }
         .hero-actions { margin-top:24px; display:flex; flex-wrap:wrap; gap:10px; }
-        .outline { display:inline-flex; align-items:center; justify-content:center; text-decoration:none; border:2px solid #8a71d2; color:#5d48a9; background:white; padding:11px 17px; border-radius:999px; font-weight:900; }
+        .outline { display:inline-flex; align-items:center; justify-content:center; text-decoration:none; border:2px solid #8a71d2; color:#5d48a9; background:white; padding:11px 17px; border-radius:999px; font-weight:900; transition:transform .22s ease, box-shadow .22s ease, background .22s ease, color .22s ease; }
+        .outline:hover { transform:translateY(-4px); box-shadow:0 12px 24px rgba(117,87,199,.18); background:#fbf9ff; color:#4b389c; }
         .hero-art { min-height:390px; border-radius:38px; overflow:hidden; position:relative; background:linear-gradient(145deg,rgba(117,87,199,.9),rgba(93,231,224,.88)); box-shadow:0 28px 80px rgba(76,56,140,.2); display:grid; place-items:center; }
         .hero-art:before,.hero-art:after { content:""; position:absolute; border-radius:50%; background:rgba(255,255,255,.2); }
         .hero-art:before { width:230px;height:230px; top:-65px;right:-50px; }
@@ -237,7 +261,7 @@ export default function Page() {
         .price small { display:block; color:#8186a5; font-size:9px; font-weight:800; margin-bottom:2px; }
         .add-btn { border:0; cursor:pointer; color:white; background:linear-gradient(100deg,#0b9f9c,#22c8c0); font-weight:900; font-size:11px; padding:8px 13px; border-radius:999px; box-shadow:0 7px 16px rgba(11,159,156,.18); }
         .add-btn:hover { transform:translateY(-1px); filter:brightness(1.05); }
-        .cart { position:sticky; top:96px; background:rgba(255,255,255,.9); border:1px solid rgba(117,87,199,.16); border-radius:28px; padding:18px; box-shadow:0 18px 55px rgba(71,49,128,.13); }
+        .cart { position:sticky; top:96px; align-self:start; background:rgba(255,255,255,.9); border:1px solid rgba(117,87,199,.16); border-radius:28px; padding:18px; box-shadow:0 18px 55px rgba(71,49,128,.13); }
         .cart-title-row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
         .cart-title { margin:0; font-size:21px; color:#4d399c; }
         .cart-count { min-width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#d9fffc;color:#087d79;font-size:12px;font-weight:950; }
@@ -254,6 +278,8 @@ export default function Page() {
         .cart-total { display:flex;justify-content:space-between;gap:10px;margin-top:16px;padding-top:14px;border-top:2px dashed #d9d0f0;font-size:15px;font-weight:950; }
         .cart-note { color:#7a7e9d;font-size:10px;margin-top:7px;line-height:1.5; }
         .cart-wa { width:100%;margin-top:13px; }
+        .cart { will-change:transform; }
+        .cart:hover { transform:translateY(-3px); transition:transform .25s ease, box-shadow .25s ease; box-shadow:0 24px 65px rgba(71,49,128,.18); }
         .continue { width:100%;margin-top:9px;border:0;background:transparent;color:#6355a1;font-weight:800;cursor:pointer;padding:8px; }
         .features { max-width:1220px;margin:auto;padding:0 22px 70px; }
         .features h2 { color:#4b389c;text-align:center;font-size:32px;margin:0 0 18px; }
@@ -263,9 +289,15 @@ export default function Page() {
         .footer { position:relative;z-index:1;background:linear-gradient(120deg,rgba(117,87,199,.95),rgba(11,159,156,.94));color:white;padding:42px 22px; }
         .footer-inner { max-width:1220px;margin:auto;text-align:center; }
         .footer h2 { margin:0 0 7px;font-size:27px; } .footer p { margin:5px 0;color:rgba(255,255,255,.88);font-size:13px; }
-        .social { display:flex;justify-content:center;gap:10px;margin-top:16px; } .social a { color:#fff;text-decoration:none;background:rgba(255,255,255,.16);padding:9px 13px;border-radius:999px;font-weight:850;font-size:12px; }
+        .social { display:flex;justify-content:center;gap:10px;margin-top:16px; } .social a { color:#fff;text-decoration:none;background:rgba(255,255,255,.16);padding:9px 13px;border-radius:999px;font-weight:850;font-size:12px;transition:transform .22s ease, background .22s ease, box-shadow .22s ease; }
+        .social a:hover { transform:translateY(-4px) scale(1.04); background:rgba(255,255,255,.28); box-shadow:0 10px 24px rgba(0,0,0,.14); }
+        .mobile-cart { transition:transform .22s ease, box-shadow .22s ease; }
+        .mobile-cart:hover { transform:translateY(-4px) scale(1.03); box-shadow:0 18px 40px rgba(71,49,128,.36); }
+        .scroll-top { position:fixed; right:20px; bottom:20px; z-index:60; width:46px; height:46px; border:0; border-radius:50%; cursor:pointer; color:white; background:linear-gradient(145deg,#7557c7,#0b9f9c); font-size:22px; font-weight:950; box-shadow:0 12px 30px rgba(71,49,128,.28); opacity:0; pointer-events:none; transform:translateY(12px); transition:opacity .25s ease, transform .25s ease, box-shadow .22s ease; }
+        .scroll-top.show { opacity:1; pointer-events:auto; transform:translateY(0); }
+        .scroll-top:hover { transform:translateY(-5px) scale(1.08); box-shadow:0 18px 38px rgba(71,49,128,.36); }
         .mobile-cart { display:none; }
-        @media (max-width:980px) { .hero{grid-template-columns:1fr}.menu-layout{grid-template-columns:1fr}.cart{position:fixed;right:14px;bottom:14px;top:auto;width:min(390px,calc(100vw - 28px));max-height:78vh;z-index:40;display:${cartOpen ? 'block' : 'none'};overflow:auto}.mobile-cart{display:flex;position:fixed;right:18px;bottom:18px;z-index:35;border:0;cursor:pointer;background:#4d399c;color:white;padding:13px 17px;border-radius:999px;font-weight:950;box-shadow:0 14px 35px rgba(71,49,128,.28)}.navlinks{display:none}.feature-grid{grid-template-columns:1fr 1fr} }
+        @media (max-width:980px) { .scroll-top{right:18px;bottom:78px}.hero{grid-template-columns:1fr}.menu-layout{grid-template-columns:1fr}.cart{position:fixed;right:14px;bottom:14px;top:auto;width:min(390px,calc(100vw - 28px));max-height:78vh;z-index:40;display:${cartOpen ? 'block' : 'none'};overflow:auto}.mobile-cart{display:flex;position:fixed;right:18px;bottom:18px;z-index:35;border:0;cursor:pointer;background:#4d399c;color:white;padding:13px 17px;border-radius:999px;font-weight:950;box-shadow:0 14px 35px rgba(71,49,128,.28)}.navlinks{display:none}.feature-grid{grid-template-columns:1fr 1fr} }
         @media (max-width:620px) { .nav{padding:9px 14px}.brand img{width:50px;height:50px}.brand-title{font-size:15px}.brand-sub{font-size:9px}.nav .whatsapp{padding:10px 12px;font-size:11px}.hero{padding:28px 14px 20px}.hero-copy{padding:26px 22px;border-radius:25px}.hero h1{font-size:43px}.hero p{font-size:14px}.hero-art{min-height:310px}.menu-wrap,.features{padding-left:14px;padding-right:14px}.menu-heading h2{font-size:34px}.menu-heading p{font-size:14px}.category{padding:15px;border-radius:22px}.items-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.item-img{height:118px}.item-body{padding:10px}.item-name{font-size:12px}.item-desc{font-size:9.5px}.item-bottom{align-items:flex-end}.price{font-size:13px}.add-btn{font-size:10px;padding:7px 10px}.feature-grid{grid-template-columns:1fr}.cart{width:calc(100vw - 24px);right:12px}.cart-items{max-height:35vh} }
       `}</style>
 
@@ -276,7 +308,7 @@ export default function Page() {
               <img src="/blr99/logo.png" alt="BLR 99 Corner" onError={(e) => { e.currentTarget.src = '/logo.png'; }} />
               <span><div className="brand-title">BLR 99 CORNER</div><div className="brand-sub">100% VEG • Icecream Boutique</div></span>
             </a>
-            <div className="navlinks"><button className="nav-button" onClick={() => setActivePage('home')}>Home</button><a href="#menu" onClick={() => setActivePage('home')}>Menu</a><button className="nav-button" onClick={() => setActivePage('about')}>About</button><a href="#contact" onClick={() => setActivePage('home')}>Contact</a></div>
+            <div className="navlinks"><button className="nav-button" onClick={goHome}>Home</button><a href="#menu" onClick={goToMenu}>Menu</a><button className="nav-button" onClick={() => setActivePage('about')}>About</button><a href="#contact" onClick={() => setActivePage('home')}>Contact</a></div>
             <button className="whatsapp" onClick={orderOnWhatsApp}>
               💬 Order on WhatsApp {cart.length ? `(${cartCount})` : ''}
             </button>
@@ -290,7 +322,7 @@ export default function Page() {
             <span className="eyebrow">100% VEG • FRESHLY MADE • HAPPY VIBES</span>
             <h1>Your Cravings.<br /><span>Your Happy Place.</span></h1>
             <p>From creamy scoops and dreamy sundaes to crispy fries, loaded waffles, burgers, sandwiches and refreshing milkshakes — there is something delicious waiting for everyone at BLR 99 Corner.</p>
-            <div className="hero-actions"><a className="whatsapp" href="#menu">🍦 Explore Our Menu</a><a className="outline" href={`tel:${phone}`}>📞 +91 98860-67444</a></div>
+            <div className="hero-actions"><a className="whatsapp" href="#menu" onClick={goToMenu}>🍦 Explore Our Menu</a><a className="outline" href={`tel:${phone}`}>📞 +91 98860-67444</a></div>
           </div>
           <div className="hero-art">
             <div className="hero-bubble bubble-one">Life is better with ice cream 🍨</div>
@@ -340,7 +372,7 @@ export default function Page() {
               </div>
             </div>
 
-            <aside className="cart" id="cart">
+            <aside className="cart cart-sticky" id="cart">
               <div className="cart-title-row"><h3 className="cart-title">🛒 Your Cart</h3><span className="cart-count">{cartCount}</span></div>
               {!cart.length ? (
                 <div className="cart-empty">Your cart is waiting for something delicious! 🍨<br />Click <strong>+ Add</strong> on any menu item.</div>
@@ -389,8 +421,8 @@ export default function Page() {
               <h1>About Us 💜🍦</h1>
               <p>We believe an ice cream café should be more than a place to grab a scoop — it should be a happy little corner where families, friends and food lovers can relax, connect and create sweet memories.</p>
               <div className="about-actions">
-                <button className="whatsapp" onClick={() => setActivePage('home')}>🍨 Explore Our Menu</button>
-                <a className="outline" href={`tel:${phone}`}>📞 Call BLR 99 Corner ICECREAM..</a>
+                <button className="whatsapp" onClick={goToMenu}>🍨 Explore Our Menu</button>
+                <a className="outline" href={`tel:${phone}`}>📞 Call BLR 99 Corner</a>
               </div>
             </div>
 
@@ -401,7 +433,7 @@ export default function Page() {
             </div>
 
             <div className="about-story">
-              <div className="about-image"><img src={'/blr99/cafe-interior.jpg'} alt="OUR Warm and welcoming café interior" /></div>
+              <div className="about-image"><img src="/blr99/cafe-interior.jpg" alt="Our Warm and inviting BLR 99 Corner ice cream café interior" /></div>
               <div className="about-copy">
                 <h2>Our Happy Corner</h2>
                 <p>BLR 99 Corner is designed around one simple idea: <strong>good food should put a smile on your face.</strong> Whether you drop in for a quick scoop, meet friends for a milkshake, bring the family for a sundae or stop by for a savoury bite, we want every visit to feel easy, cheerful and memorable.</p>
@@ -412,7 +444,7 @@ export default function Page() {
                   <div className="about-point">👨‍👩‍👧‍👦 Family Friendly</div>
                   <div className="about-point">💜 Made with Happiness</div>
                   <div className="about-point">🛵 Free Home Delivery</div>
-                  <div className="about-point">🚗 Drive-In Service(AFTER 8 P.M)</div>
+                  <div className="about-point">🚗 Drive-In Service</div>
                 </div>
               </div>
             </div>
@@ -430,7 +462,7 @@ export default function Page() {
         <footer id="contact" className="footer">
           <div className="footer-inner">
             <h2>Good Food. Happy Mood. 💜</h2>
-            <p>🚗 Drive-In Service Available (AFTER 8P.M) &nbsp; • &nbsp; 🛵 Free Home Delivery</p>
+            <p>🚗 Drive-In Service Available AFTER 8 P.M &nbsp; • &nbsp; 🛵 Free Home Delivery</p>
             <p>#41, A.J. Chambers, RV Road, Basavanagudi, Bangalore-560004</p>
             <p>📞 +91 98860-67444 &nbsp; • &nbsp; 🌐 www.blr99corner.com</p>
             <div className="social"><a href="https://www.instagram.com/blr99corner" target="_blank" rel="noreferrer">Instagram @blr99corner</a><a href="https://www.facebook.com/blr99corner" target="_blank" rel="noreferrer">Facebook /blr99corner</a></div>
@@ -440,6 +472,7 @@ export default function Page() {
       </div>
 
       <button className="mobile-cart" onClick={() => setCartOpen((open) => !open)}>🛒 Cart {cartCount ? `(${cartCount}) • ₹${subtotal}` : ''}</button>
+      <button className={`scroll-top ${showScrollTop ? 'show' : ''}`} onClick={goToTop} aria-label="Back to top" title="Back to top">↑</button>
     </main>
   );
 }
