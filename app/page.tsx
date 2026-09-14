@@ -1,373 +1,368 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
+
+type MenuItem = {
+  name: string;
+  price: number;
+  doublePrice?: number;
+  tag?: string;
+  desc: string;
+  img: string;
+};
+
+type CartItem = MenuItem & { qty: number };
 
 const phone = '+919886067444';
 
-const menu = {
+// Images are served directly from the Unsplash CDN.
+const cdn = (id: string) =>
+  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=700&q=82`;
+
+const menu: Record<string, MenuItem[]> = {
   'Icecreams 🍦': [
-    ['Vanilla Classic', '₹60', '₹120', 'Classic vanilla ice cream', 'icecream.png'],
-    ['Belgium Chocolate', '₹90', '₹170', 'Rich Belgian chocolate', 'icecream.png'],
-    ['Strawberry Bliss', '₹65', '₹120', 'Creamy strawberry delight', 'icecream.png'],
-    ['Mango Tango', '₹70', '₹130', 'Mango ice cream', 'icecream.png'],
-    ['Pistachio Royal', '₹75', '₹140', 'Premium pistachio', 'icecream.png'],
-    ['Blue Berry Cheese Cake', '₹80', '₹150', 'Blueberry cheesecake flavour', 'icecream.png'],
-    ['Butter Scotch Dream', '₹65', '₹120', 'Butterscotch ice cream', 'icecream.png'],
-    ['Cookies & Cream', '₹80', '₹150', 'Cookies and cream', 'icecream.png'],
-    ['Tiramisu', '₹85', '₹160', 'Tiramisu inspired flavour', 'icecream.png'],
-    ['DryFruit', '₹90', '₹170', 'Rich dry-fruit ice cream', 'icecream.png'],
-    ['Red Velvet', '₹85', '₹160', 'Red velvet flavour', 'icecream.png'],
-    ['Black Currant', '₹70', '₹130', 'Black currant flavour', 'icecream.png'],
-    ['Normal Chocolate', '₹70', '₹130', 'Classic chocolate ice cream', 'icecream.png'],
-    ['Chocolate Fudge', '₹80', '₹150', 'Chocolate fudge ice cream', 'icecream.png'],
+    { name: 'Vanilla Classic', price: 60, doublePrice: 120, tag: 'CLASSIC', desc: 'Classic vanilla ice cream', img: cdn('photo-1576506295286-5cda18df43e7') },
+    { name: 'Belgium Chocolate', price: 90, doublePrice: 170, tag: 'PRIME', desc: 'Rich Belgian chocolate', img: cdn('photo-1563805042-7684c019e1cb') },
+    { name: 'Strawberry Bliss', price: 65, doublePrice: 120, tag: 'CLASSIC', desc: 'Creamy strawberry delight', img: cdn('photo-1497034825429-c343d7c6a68f') },
+    { name: 'Mango Tango', price: 70, doublePrice: 130, tag: 'CLASSIC', desc: 'Mango ice cream', img: cdn('photo-1501443762994-82bd5dace89a') },
+    { name: 'Pistachio Royal', price: 75, doublePrice: 140, tag: 'PRIME', desc: 'Premium pistachio', img: cdn('photo-1579954115563-e72bf1381629') },
+    { name: 'Blue Berry Cheese Cake', price: 80, doublePrice: 150, tag: 'PRIME', desc: 'Blueberry cheesecake flavour', img: cdn('photo-1533134242443-d4fd215305ad') },
+    { name: 'Butter Scotch Dream', price: 65, doublePrice: 120, tag: 'CLASSIC', desc: 'Butterscotch ice cream', img: cdn('photo-1497034825429-c343d7c6a68f') },
+    { name: 'Cookies & Cream', price: 80, doublePrice: 150, tag: 'PRIME', desc: 'Cookies and cream', img: cdn('photo-1579954115545-a95591f28bfc') },
+    { name: 'Tiramisu', price: 85, doublePrice: 160, tag: 'PRIME', desc: 'Tiramisu inspired flavour', img: cdn('photo-1571877227200-a0d98ea607e9') },
+    { name: 'DryFruit', price: 90, doublePrice: 170, tag: 'PRIME', desc: 'Rich dry-fruit ice cream', img: cdn('photo-1563805042-7684c019e1cb') },
+    { name: 'Red Velvet', price: 85, doublePrice: 160, tag: 'PRIME', desc: 'Red velvet flavour', img: cdn('photo-1551024506-0bccd828d307') },
+    { name: 'Black Currant', price: 70, doublePrice: 130, tag: 'CLASSIC', desc: 'Black currant flavour', img: cdn('photo-1497034825429-c343d7c6a68f') },
+    { name: 'Normal Chocolate', price: 70, doublePrice: 130, tag: 'CLASSIC', desc: 'Classic chocolate ice cream', img: cdn('photo-1563805042-7684c019e1cb') },
+    { name: 'Chocolate Fudge', price: 80, doublePrice: 150, tag: 'PRIME', desc: 'Chocolate fudge ice cream', img: cdn('photo-1576506295286-5cda18df43e7') },
   ],
   'Milkshakes 🥤': [
-    ['Nutrella Nutty', '₹110', '', 'Creamy hazelnut chocolate shake', 'milkshake.png'],
-    ['Classic Vanilla', '₹90', '', 'Smooth vanilla shake', 'milkshake.png'],
-    ['Double Chocolate', '₹110', '', 'Extra chocolate goodness', 'milkshake.png'],
-    ['StrawBerry Swirls', '₹95', '', 'Strawberry swirled shake', 'milkshake.png'],
-    ['Oreo Crush', '₹110', '', 'Oreo cookie shake', 'milkshake.png'],
-    ['Mango Madness', '₹100', '', 'Mango milkshake', 'milkshake.png'],
-    ['Caramel Drizzle', '₹105', '', 'Caramel topped shake', 'milkshake.png'],
-    ['Cold Coffee Classic', '₹100', '', 'Cold coffee milkshake', 'milkshake.png'],
-    ['KitKat Shake', '₹115', '', 'KitKat chocolate shake', 'milkshake.png'],
-    ['Classic Chocolate', '₹100', '', 'Classic chocolate shake', 'milkshake.png'],
-    ['Caramel Mocha', '₹120', '', 'Coffee, chocolate and caramel', 'milkshake.png'],
+    { name: 'Nutrella Nutty', price: 110, desc: 'Creamy hazelnut chocolate shake', img: cdn('photo-1579954115545-a95591f28bfc') },
+    { name: 'Classic Vanilla', price: 90, desc: 'Smooth vanilla shake', img: cdn('photo-1461023058943-07fcbe16d735') },
+    { name: 'Double Chocolate', price: 110, desc: 'Extra chocolate goodness', img: cdn('photo-1541658016709-82535e94bc69') },
+    { name: 'StrawBerry Swirls', price: 95, desc: 'Strawberry swirled shake', img: cdn('photo-1572490122747-3968b75cc699') },
+    { name: 'Oreo Crush', price: 110, desc: 'Oreo cookie shake', img: cdn('photo-1579954115545-a95591f28bfc') },
+    { name: 'Mango Madness', price: 100, desc: 'Mango milkshake', img: cdn('photo-1546173159-315724a31696') },
+    { name: 'Caramel Drizzle', price: 105, desc: 'Caramel topped shake', img: cdn('photo-1579954115545-a95591f28bfc') },
+    { name: 'Cold Coffee Classic', price: 100, desc: 'Cold coffee milkshake', img: cdn('photo-1461023058943-07fcbe16d735') },
+    { name: 'KitKat Shake', price: 115, desc: 'KitKat chocolate shake', img: cdn('photo-1541658016709-82535e94bc69') },
+    { name: 'Classic Chocolate', price: 100, desc: 'Classic chocolate shake', img: cdn('photo-1579954115545-a95591f28bfc') },
+    { name: 'Caramel Mocha', price: 120, desc: 'Coffee, chocolate and caramel', img: cdn('photo-1461023058943-07fcbe16d735') },
   ],
   'Sandwiches 🥪': [
-    ['Veg Grilled', '₹80', '', 'Grilled to perfection, made for you!', 'sandwich.png'],
-    ['Chocolate', '₹75', '', 'Sweet grilled sandwich', 'sandwich.png'],
-    ['Corn & Cheese', '₹110', '', 'Creamy corn and cheese', 'sandwich.png'],
-    ['Classic Veg Club', '₹110', '', 'Classic layered veg sandwich', 'sandwich.png'],
-    ['Chilli Cheeze', '₹90', '', 'Spicy chilli and cheese', 'sandwich.png'],
+    { name: 'Veg Grilled', price: 80, desc: 'Grilled to perfection, made for you!', img: cdn('photo-1528735602780-2552fd46c7af') },
+    { name: 'Chocolate', price: 75, desc: 'Sweet grilled sandwich', img: cdn('photo-1509440159596-0249088772ff') },
+    { name: 'Corn & Cheese', price: 110, desc: 'Creamy corn and cheese', img: cdn('photo-1528735602780-2552fd46c7af') },
+    { name: 'Classic Veg Club', price: 110, desc: 'Classic layered veg sandwich', img: cdn('photo-1553909489-cd47e0907980') },
+    { name: 'Chilli Cheeze', price: 90, desc: 'Spicy chilli and cheese', img: cdn('photo-1528735602780-2552fd46c7af') },
   ],
   'Burgers 🍔': [
-    ['Crispy Veg', '₹90', '', 'Crispy veggie burger', 'burger.png'],
-    ['Cheese Burst', '₹110', '', 'Loaded with cheesy goodness', 'burger.png'],
-    ['Aloo Tikka Classic', '₹100', '', 'Classic aloo tikka burger', 'burger.png'],
-    ['Double Patty Veg', '₹140', '', 'Double patty veggie burger', 'burger.png'],
+    { name: 'Crispy Veg', price: 90, desc: 'Crispy veggie burger', img: cdn('photo-1568901346375-23c9450c58cd') },
+    { name: 'Cheese Burst', price: 110, desc: 'Loaded with cheesy goodness', img: cdn('photo-1572802419224-296b0aeee0d9') },
+    { name: 'Aloo Tikka Classic', price: 100, desc: 'Classic aloo tikka burger', img: cdn('photo-1550547660-d9450f859349') },
+    { name: 'Double Patty Veg', price: 140, desc: 'Double patty veggie burger', img: cdn('photo-1568901346375-23c9450c58cd') },
   ],
   'French Fries 🍟': [
-    ['French Fries', '₹85', '', 'Crispy, golden and irresistible', 'fries.png'],
-    ['Peri Peri French Fries', '₹95', '', 'Crispy fries with peri peri seasoning', 'fries.png'],
-    ['Cheezy Garlic Potato', '₹100', '', 'Cheesy garlic potato — 15 pieces', 'smiley.png'],
-    ['Smiley', '₹95', '', '7 pieces', 'smiley.png'],
+    { name: 'French Fries', price: 85, desc: 'Crispy, golden and irresistible', img: cdn('photo-1573080496219-bb080dd4f877') },
+    { name: 'Peri Peri French Fries', price: 95, desc: 'Crispy fries with peri peri seasoning', img: cdn('photo-1630384060421-cb20d0e0649d') },
+    { name: 'Cheezy Garlic Potato', price: 100, desc: 'Cheesy garlic potato — 15 pieces', img: cdn('photo-1585109649139-366815a0d713') },
+    { name: 'Smiley', price: 95, desc: '7 pieces', img: cdn('photo-1623238913973-21e45cced554') },
   ],
   'Waffle Mixes 🧇': [
-    ['Honey', '₹80', '₹60', 'With icecream / without icecream', 'waffle.png'],
-    ['Coco', '₹95', '₹75', 'With icecream / without icecream', 'waffle.png'],
-    ['Nutrella', '₹105', '₹85', 'With icecream / without icecream', 'waffle.png'],
-    ['Oreo', '₹95', '₹75', 'With icecream / without icecream', 'waffle.png'],
-    ['Fruit & Honey', '₹95', '₹75', 'With icecream / without icecream', 'waffle.png'],
+    { name: 'Honey', price: 80, desc: 'With icecream ₹80 • Without icecream ₹60', img: cdn('photo-1562376552-0d160a2f238d') },
+    { name: 'Coco', price: 95, desc: 'With icecream ₹95 • Without icecream ₹75', img: cdn('photo-1562376552-0d160a2f238d') },
+    { name: 'Nutrella', price: 105, desc: 'With icecream ₹105 • Without icecream ₹85', img: cdn('photo-1562376552-0d160a2f238d') },
+    { name: 'Oreo', price: 95, desc: 'With icecream ₹95 • Without icecream ₹75', img: cdn('photo-1562376552-0d160a2f238d') },
+    { name: 'Fruit & Honey', price: 95, desc: 'With icecream ₹95 • Without icecream ₹75', img: cdn('photo-1562376552-0d160a2f238d') },
   ],
   'Sundaes 🍨': [
-    ['Hot Chocolate Fudge Sundae', '₹110', '', '2 scoops Vanilla, chocolate fudge sauce, peanuts', 'sundae_choco.png'],
-    ['Strawberry Dream Sundae', '₹130', '', '2 scoops Strawberry, Vanilla cake, Strawberry compote, Jelly', 'sundae_cherry.png'],
-    ['Cake Fudge Sundae', '₹140', '', '2 scoops Vanilla, Chocolate Cake, Chocolate Fudge sauce, Peanuts', 'sundae_choco.png'],
-    ['Lychee Sundae', '₹140', '', '2 scoops Vanilla, Lychee pieces, Cream Sauce', 'sundae_cherry.png'],
-    ['Dry Fruit Sundae', '₹150', '', '2 scoops Vanilla, Brownie, Roasted dry fruits, Milkmaid, Honey, Jelly', 'sundae_choco.png'],
-    ['Neapolitan Sundae', '₹140', '', '3 scoops — Vanilla/Strawberry/Chocolate, Strawberry Compote, Chocolate Sauce', 'sundae_cherry.png'],
-    ['Butter Scotch Sundae', '₹130', '', '2 Scoops Butter Scotch, Caramel sauce, Chocolate Sauce, Cashew', 'sundae_choco.png'],
-    ['Brownie Fudge Sundae', '₹150', '', '2 scoops Vanilla & Chocolate, Brownie, Chocolate Sauce, Chocochip', 'sundae_choco.png'],
-    ['Red Velvet Berry Sundae', '₹150', '', '2 scoops Red Velvet, Strawberry Compote, Jelly, Cherry', 'sundae_cherry.png'],
-    ['Tiramisu Sundae', '₹160', '', '2 scoops Tiramisu, Vanilla Cake, Roasted almond, Chocolate Sauce', 'sundae_choco.png'],
-    ['Death By Chocolate', '₹190', '', '3 scoops Vanilla, Chocolate Cake, Chocolate Sauce, Roasted Peanut, Cherry', 'sundae_choco.png'],
-    ['Fruit Gudbud Sundae', '₹190', '', 'Vanilla/Strawberry/Mango with Choco Cake, Choco Sauce, Peanut, Honey, Cherry', 'sundae_cherry.png'],
-    ['Nutella Brownie Mashup Sundae', '₹200', '', '2 scoops Vanilla, Brownie, Nutella, Almond, Cashew, Cherry', 'sundae_choco.png'],
+    { name: 'Hot Chocolate Fudge Sundae', price: 110, desc: '2 scoops Vanilla, chocolate fudge sauce, peanuts', img: cdn('photo-1563805042-7684c019e1cb') },
+    { name: 'Strawberry Dream Sundae', price: 130, desc: '2 scoops Strawberry, Vanilla cake, Strawberry compote, Jelly', img: cdn('photo-1497034825429-c343d7c6a68f') },
+    { name: 'Cake Fudge Sundae', price: 140, desc: '2 scoops Vanilla, Chocolate Cake, Chocolate Fudge sauce, Peanuts', img: cdn('photo-1576506295286-5cda18df43e7') },
+    { name: 'Lychee Sundae', price: 140, desc: '2 scoops Vanilla, Lychee pieces, Cream Sauce', img: cdn('photo-1497034825429-c343d7c6a68f') },
+    { name: 'Dry Fruit Sundae', price: 150, desc: '2 scoops Vanilla, Brownie, roasted dry fruits, Milkmaid, Honey, Jelly', img: cdn('photo-1563805042-7684c019e1cb') },
+    { name: 'Neapolitan Sundae', price: 140, desc: '3 scoops — Vanilla, Strawberry & Chocolate', img: cdn('photo-1497034825429-c343d7c6a68f') },
+    { name: 'Butter Scotch Sundae', price: 130, desc: '2 scoops Butterscotch, caramel sauce, chocolate sauce, cashew', img: cdn('photo-1579954115563-e72bf1381629') },
+    { name: 'Brownie Fudge Sundae', price: 150, desc: '2 scoops Vanilla & Chocolate, brownie, chocolate sauce, chocochip', img: cdn('photo-1576506295286-5cda18df43e7') },
+    { name: 'Red Velvet Berry Sundae', price: 150, desc: '2 scoops Red Velvet, strawberry compote, jelly, cherry', img: cdn('photo-1551024506-0bccd828d307') },
+    { name: 'Tiramisu Sundae', price: 160, desc: '2 scoops Tiramisu, vanilla cake, roasted almond, chocolate sauce', img: cdn('photo-1571877227200-a0d98ea607e9') },
+    { name: 'Death By Chocolate', price: 190, desc: '3 scoops Vanilla, Chocolate Cake, Chocolate Sauce, roasted peanut, cherry', img: cdn('photo-1563805042-7684c019e1cb') },
+    { name: 'Fruit Gudbud Sundae', price: 190, desc: 'Vanilla, Strawberry & Mango with choco cake, sauce, peanut, honey, cherry', img: cdn('photo-1497034825429-c343d7c6a68f') },
+    { name: 'Nutella Brownie Mashup Sundae', price: 200, desc: '2 scoops Vanilla, brownie, Nutella, almond, cashew, cherry', img: cdn('photo-1576506295286-5cda18df43e7') },
   ],
-} as const;
+};
 
-const features = [
-  ['🐾', 'Treat Your Pets', 'Why leave your furry friend behind when they can enjoy a delicious ice cream treat too?', 'Pet-friendly treats for your four-legged companions.'],
-  ['🧸', 'Kids’ Play Area', 'Enjoy your ice cream peacefully while your little ones have fun!', 'Let the kids play, explore and make memories while you relax.'],
-  ['🎮', 'Play & Win Free Ice Cream', 'Play exciting games, challenge yourself and win your favourite ice cream for FREE!', 'Fun challenges and sweet rewards.'],
-  ['📲', 'Join Our WhatsApp Community', 'Join our community and unlock exclusive discounts, exciting offers and special treats!', 'Stay connected for new offers and treats.'],
-  ['🎯', 'Games for Adults', 'Fun Isn’t Just for Kids!', 'Challenge your friends, test your skills and enjoy exciting games made for grown-ups too.'],
-  ['🍨', 'Sugar-Free Ice Cream', 'A delicious option without the added sugar.', 'Ask our team about sugar-free ice cream options.'],
-];
+const categorySubtitles: Record<string, string> = {
+  'Icecreams 🍦': 'Classic scoops. Premium flavours.',
+  'Milkshakes 🥤': 'Thick shakes. Happy vibes.',
+  'Sandwiches 🥪': 'Grilled to perfection, made for you!',
+  'Burgers 🍔': 'Big bites, bigger smiles!',
+  'French Fries 🍟': 'Crispy. Golden. Irresistible!',
+  'Waffle Mixes 🧇': 'Crispy waffles, sweet happiness!',
+  'Sundaes 🍨': 'Scoops. Toppings. Pure joy!',
+};
+
+const allItems = Object.values(menu).flat();
 
 export default function Page() {
-  const [hideHeader, setHideHeader] = useState(false);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cartOpen, setCartOpen] = useState(false);
 
-  useEffect(() => {
-    const onScroll = () => setHideHeader(window.scrollY > 120);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const cartCount = useMemo(() => cart.reduce((sum, item) => sum + item.qty, 0), [cart]);
+  const subtotal = useMemo(() => cart.reduce((sum, item) => sum + item.price * item.qty, 0), [cart]);
 
-  const order = (name = '') =>
-    `https://wa.me/${phone}?text=${encodeURIComponent(name ? `Hi BLR 99 Corner, I want to order.. ${name}` : 'Hi BLR 99 Corner')}`;
+  const addToCart = (item: MenuItem) => {
+    setCart((current) => {
+      const found = current.find((x) => x.name === item.name);
+      if (found) {
+        return current.map((x) => x.name === item.name ? { ...x, qty: x.qty + 1 } : x);
+      }
+      return [...current, { ...item, qty: 1 }];
+    });
+    setCartOpen(true);
+  };
+
+  const changeQty = (name: string, delta: number) => {
+    setCart((current) => current
+      .map((item) => item.name === name ? { ...item, qty: item.qty + delta } : item)
+      .filter((item) => item.qty > 0)
+    );
+  };
+
+  const removeFromCart = (name: string) => {
+    setCart((current) => current.filter((item) => item.name !== name));
+  };
+
+  const orderOnWhatsApp = () => {
+    if (!cart.length) return;
+    const lines = cart.map((item) => `• ${item.name} x${item.qty} — ₹${item.price * item.qty}`);
+    const message = [
+      'Hi BLR 99 Corner! 👋',
+      '',
+      'I would like to order:',
+      ...lines,
+      '',
+      `Subtotal: ₹${subtotal}`,
+      '',
+      'Please confirm my order. Thank you! 🍦',
+    ].join('\n');
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+  };
 
   return (
-    <main className="site">
+    <main className="site-shell">
       <style>{`
-        :root {
-          --green:#075b42;
-          --green2:#0c7656;
-          --cream:#fff8e8;
-          --gold:#d49a24;
-          --ink:#1d201d;
-          --cyan:#dff5f1;
-          --red:#b82b28;
-        }
-        * { box-sizing:border-box; scroll-behavior:smooth; }
-        body { margin:0; background:#e5f4f1; }
-        .site {
-          min-height:100vh;
-          color:var(--ink);
-          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-          background:
-            radial-gradient(circle at 8% 8%, rgba(255,255,255,.9) 0 5%, transparent 23%),
-            radial-gradient(circle at 92% 18%, rgba(210,247,239,.95) 0 4%, transparent 22%),
-            radial-gradient(circle at 18% 88%, rgba(246,226,174,.28) 0 5%, transparent 25%),
-            linear-gradient(135deg,#e9f6f3 0%,#fff9e9 45%,#eef8f6 100%);
-          position:relative;
-          overflow:hidden;
-        }
-        .site:before {
-          content:"";
-          position:fixed; inset:0; pointer-events:none; z-index:0;
-          opacity:.12;
-          background-image:
-            radial-gradient(circle at 20% 20%, #0b6b4d 0 1px, transparent 2px),
-            radial-gradient(circle at 80% 70%, #d49a24 0 1px, transparent 2px);
-          background-size:42px 42px,58px 58px;
-        }
-        header {
-          position:fixed; top:12px; left:50%; transform:translateX(-50%);
-          width:min(1180px,calc(100% - 24px)); z-index:30;
-          display:flex; align-items:center; justify-content:space-between; gap:18px;
-          padding:10px 14px;
-          background:rgba(7,91,66,.94); backdrop-filter:blur(16px);
-          border:1px solid rgba(255,255,255,.22); border-bottom:4px solid var(--gold);
-          border-radius:22px; box-shadow:0 14px 35px rgba(0,65,48,.22);
-          transition:.35s ease;
-        }
-        header.hide { opacity:0; transform:translate(-50%,-130%); pointer-events:none; }
-        .brand { display:flex; align-items:center; gap:11px; min-width:0; }
-        .brand img { width:66px;height:66px;border-radius:50%;object-fit:cover;background:white;border:2px solid var(--gold); }
-        .brand-title { color:#fff7df;font-weight:950;letter-spacing:.5px;font-size:18px; }
-        .brand-sub { color:#d8f4eb;font-size:11px;font-weight:700;margin-top:2px; }
-        nav { display:flex; align-items:center; gap:5px; margin-left:auto; }
-        nav a { color:#fff;text-decoration:none;font-size:13px;font-weight:850;padding:9px 10px;border-radius:10px; }
-        nav a:hover { background:rgba(255,255,255,.13); color:#ffe6a4; }
-        .wa { background:#25d366 !important; color:#073d2c !important; padding:11px 15px !important; }
-        .hero { position:relative; z-index:1; padding:145px 22px 58px; }
-        .hero-inner { max-width:1180px;margin:auto;display:grid;grid-template-columns:1.08fr .92fr;gap:35px;align-items:center; }
-        .hero-copy { background:rgba(255,252,241,.9); border:1px solid rgba(7,91,66,.18); border-left:7px solid var(--green); border-radius:28px;padding:38px;box-shadow:0 18px 55px rgba(23,74,61,.1); }
-        .eyebrow { display:inline-block;background:var(--green);color:white;border-radius:999px;padding:7px 13px;font-size:11px;font-weight:900;letter-spacing:.5px; }
-        h1 { margin:17px 0 13px;font-size:clamp(38px,5vw,64px);line-height:.98;color:var(--green);letter-spacing:-2px; }
-        h1 span { color:#0c8d73; }
-        .hero-copy p { font-size:17px;line-height:1.65;opacity:.75;max-width:650px; }
-        .hero-actions { display:flex;gap:11px;flex-wrap:wrap;margin-top:24px; }
-        .btn { text-decoration:none;border-radius:13px;padding:13px 18px;font-weight:900;display:inline-block;transition:.2s; }
-        .btn:hover { transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.12); }
-        .primary { background:var(--green);color:white; }
-        .secondary { background:white;color:var(--green);border:2px solid var(--gold); }
-        .hero-logo { width:min(430px,90vw);aspect-ratio:1;object-fit:cover;border-radius:50%;border:8px solid var(--gold);background:white;box-shadow:0 25px 70px rgba(7,91,66,.22); }
-        section { position:relative; z-index:1; }
-        .section-wrap { max-width:1180px;margin:auto;padding:35px 22px 70px; }
-        .section-title { text-align:center;margin:0 0 10px;color:var(--green);font-size:34px;font-weight:950; }
-        .section-lead { text-align:center;max-width:760px;margin:0 auto 28px;opacity:.72;line-height:1.6; }
-        .menu-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px; }
-        .menu-category { margin:26px 0 44px; }
-        .cat-title { display:inline-flex;align-items:center;gap:8px;background:var(--green);color:white;padding:10px 18px;border-radius:0 15px 15px 0;border-left:5px solid var(--gold);font-size:23px;font-weight:950;box-shadow:0 8px 22px rgba(7,91,66,.12); }
-        .cat-note { margin:9px 0 14px 18px;color:#7a3829;font-family:Georgia,serif;font-style:italic;font-weight:700; }
-        .card { background:rgba(255,255,255,.92);border:1px solid rgba(7,91,66,.13);border-radius:20px;overflow:hidden;box-shadow:0 10px 28px rgba(0,65,48,.08);transition:.25s; }
-        .card:hover { transform:translateY(-5px);box-shadow:0 18px 40px rgba(0,65,48,.14);border-color:rgba(212,154,36,.55); }
-        .card-img { height:155px;overflow:hidden;background:#f5ead0; }
-        .card-img img { width:100%;height:100%;object-fit:cover;display:block;transition:.4s; }
-        .card:hover .card-img img { transform:scale(1.06); }
-        .card-body { padding:14px; }
-        .name { font-weight:900;font-size:15px; }
-        .desc { font-size:11px;opacity:.63;line-height:1.4;margin-top:4px;min-height:31px; }
-        .price-row { margin-top:12px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px; }
-        .price { color:var(--green);font-size:16px;font-weight:950; }
-        .price small { display:block;font-size:8px;color:#777;text-transform:uppercase;letter-spacing:.4px; }
-        .add { border:0;background:linear-gradient(90deg,var(--green),#0b9677);color:white;border-radius:999px;padding:7px 12px;font-weight:900;cursor:pointer;text-decoration:none;font-size:11px; }
-        .features { background:rgba(255,249,232,.72);border-top:1px solid rgba(7,91,66,.1);border-bottom:1px solid rgba(7,91,66,.1); }
-        .feature-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:18px; }
-        .feature { background:rgba(255,255,255,.82);border:1px solid rgba(7,91,66,.12);border-radius:22px;padding:22px;box-shadow:0 8px 24px rgba(0,65,48,.06); }
-        .feature-icon { font-size:30px; }
-        .feature h3 { margin:8px 0 7px;color:var(--green);font-size:19px; }
-        .feature p { margin:5px 0;line-height:1.55;font-size:13px;opacity:.75; }
-        .about { background:linear-gradient(135deg,rgba(7,91,66,.96),rgba(12,118,86,.92));color:white; }
-        .about-grid { display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center; }
-        .about h2 { font-size:38px;margin:0 0 12px;color:#fff5d6; }
-        .about p { line-height:1.75;color:rgba(255,255,255,.84); }
-        .info-card { background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:22px;padding:24px; }
-        .social { display:flex;gap:10px;flex-wrap:wrap;margin-top:18px; }
-        .social a { color:var(--green);background:#fff8e8;padding:10px 13px;border-radius:999px;text-decoration:none;font-weight:900;font-size:13px; }
-        footer { position:relative;z-index:1;background:#063e2d;color:#e9f7f2;text-align:center;padding:40px 22px 55px; }
-        footer strong { color:#ffe2a0; }
-        .footer-social { margin-top:14px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap; }
-        .footer-social a { color:white;text-decoration:none;font-weight:850;padding:8px 12px;border:1px solid rgba(255,255,255,.22);border-radius:999px; }
-        .watermark { position:fixed;right:16px;bottom:16px;width:74px;height:74px;border-radius:50%;opacity:.13;z-index:2;pointer-events:none; }
-        @media(max-width:900px) {
-          header { padding:8px 10px; }
-          nav a:not(.wa) { display:none; }
-          .hero-inner,.about-grid { grid-template-columns:1fr; }
-          .hero-copy { padding:28px; }
-          .hero-logo { margin:auto;display:block; }
-          .feature-grid { grid-template-columns:1fr 1fr; }
-        }
-        @media(max-width:600px) {
-          header { top:6px;width:calc(100% - 12px);border-radius:16px; }
-          .brand img { width:52px;height:52px; }
-          .brand-title { font-size:14px; }
-          .brand-sub { font-size:9px; }
-          .wa { font-size:10px !important;padding:9px 10px !important; }
-          .hero { padding-top:112px; }
-          .hero-copy { padding:23px; }
-          h1 { font-size:40px; }
-          .menu-grid { grid-template-columns:1fr 1fr;gap:12px; }
-          .card-img { height:125px; }
-          .card-body { padding:11px; }
-          .name { font-size:13px; }
-          .feature-grid { grid-template-columns:1fr; }
-          .section-wrap { padding-left:14px;padding-right:14px; }
-        }
+        :root { --lavender:#e9ddff; --lavender-deep:#7557c7; --cyan:#5de7e0; --cyan-deep:#0b9f9c; --ink:#17205d; --cream:#fffaff; --card:rgba(255,255,255,.92); }
+        * { box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { margin:0; }
+        .site-shell { min-height:100vh; color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:linear-gradient(135deg,#e8ddff 0%,#f8f3ff 35%,#d9fbf7 100%); overflow-x:hidden; }
+        .site-shell:before { content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.52; background-image:radial-gradient(circle at 8% 15%,rgba(117,87,199,.28) 0 70px,transparent 71px),radial-gradient(circle at 92% 20%,rgba(93,231,224,.34) 0 100px,transparent 101px),radial-gradient(circle at 78% 88%,rgba(117,87,199,.22) 0 80px,transparent 81px),linear-gradient(120deg,transparent 0 46%,rgba(255,255,255,.48) 46.2% 46.7%,transparent 47% 100%); }
+        .site-shell:after { content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.10; background:linear-gradient(135deg,rgba(117,87,199,.75),rgba(93,231,224,.55)),url('https://images.unsplash.com/photo-1554118811-1e0d58224f31?auto=format&fit=crop&w=1800&q=70') center/cover no-repeat; mix-blend-mode:multiply; }
+        .content { position:relative; z-index:1; }
+        .topbar { position:sticky; top:0; z-index:30; backdrop-filter:blur(18px); background:rgba(250,247,255,.88); border-bottom:1px solid rgba(117,87,199,.16); box-shadow:0 8px 30px rgba(74,50,130,.08); }
+        .nav { max-width:1220px; margin:auto; min-height:78px; padding:10px 22px; display:flex; align-items:center; justify-content:space-between; gap:18px; }
+        .brand { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--ink); }
+        .brand img { width:62px; height:62px; object-fit:cover; border-radius:50%; background:white; border:3px solid var(--cyan-deep); box-shadow:0 8px 22px rgba(11,159,156,.18); }
+        .brand-title { font-size:18px; font-weight:950; letter-spacing:.02em; }
+        .brand-sub { font-size:11px; font-weight:750; color:#6c62a7; margin-top:3px; }
+        .navlinks { display:flex; align-items:center; gap:8px; }
+        .navlinks a { text-decoration:none; color:var(--ink); font-weight:800; font-size:13px; padding:10px 12px; border-radius:999px; }
+        .navlinks a:hover { background:#e4faf8; }
+        .whatsapp { border:0; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; background:linear-gradient(100deg,#0b9f9c,#20c9c0); color:white; font-weight:900; padding:12px 18px; border-radius:999px; box-shadow:0 9px 24px rgba(11,159,156,.23); }
+        .hero { max-width:1220px; margin:auto; padding:58px 22px 34px; display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:center; }
+        .hero-copy { background:rgba(255,255,255,.78); border:1px solid rgba(117,87,199,.16); border-radius:34px; padding:40px; box-shadow:0 22px 65px rgba(80,56,145,.12); }
+        .eyebrow { display:inline-block; padding:7px 13px; border-radius:999px; background:#d9fffc; color:#087d79; font-size:11px; font-weight:900; letter-spacing:.06em; }
+        .hero h1 { margin:18px 0 12px; font-size:clamp(42px,6vw,68px); line-height:.98; letter-spacing:-.045em; color:#4b389c; }
+        .hero h1 span { color:#079e9b; }
+        .hero p { max-width:640px; margin:0; color:#565b85; font-size:17px; line-height:1.65; }
+        .hero-actions { margin-top:24px; display:flex; flex-wrap:wrap; gap:10px; }
+        .outline { display:inline-flex; align-items:center; justify-content:center; text-decoration:none; border:2px solid #8a71d2; color:#5d48a9; background:white; padding:11px 17px; border-radius:999px; font-weight:900; }
+        .hero-art { min-height:390px; border-radius:38px; overflow:hidden; position:relative; background:linear-gradient(145deg,rgba(117,87,199,.9),rgba(93,231,224,.88)); box-shadow:0 28px 80px rgba(76,56,140,.2); display:grid; place-items:center; }
+        .hero-art:before,.hero-art:after { content:""; position:absolute; border-radius:50%; background:rgba(255,255,255,.2); }
+        .hero-art:before { width:230px;height:230px; top:-65px;right:-50px; }
+        .hero-art:after { width:170px;height:170px; bottom:-50px;left:-35px; }
+        .hero-art img { width:74%; height:74%; object-fit:cover; border-radius:42% 58% 55% 45% / 48% 42% 58% 52%; border:9px solid rgba(255,255,255,.86); box-shadow:0 24px 55px rgba(41,27,89,.25); position:relative; z-index:1; }
+        .hero-bubble { position:absolute; z-index:2; background:white; color:#4b389c; padding:12px 15px; border-radius:18px; font-weight:950; box-shadow:0 12px 30px rgba(50,30,100,.18); }
+        .bubble-one { top:28px;left:24px;transform:rotate(-4deg); } .bubble-two { right:20px;bottom:28px;transform:rotate(4deg); }
+        .menu-wrap { max-width:1220px; margin:auto; padding:18px 22px 70px; }
+        .menu-heading { text-align:center; padding:30px 20px 14px; }
+        .menu-heading h2 { font-size:42px; margin:0 0 10px; color:#4b389c; letter-spacing:-.03em; }
+        .menu-heading p { max-width:760px; margin:0 auto; color:#5c628c; font-size:16px; line-height:1.7; }
+        .menu-layout { display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:22px; align-items:start; }
+        .categories { min-width:0; }
+        .category { margin:0 0 26px; padding:22px; background:rgba(255,255,255,.72); border:1px solid rgba(117,87,199,.14); border-radius:28px; box-shadow:0 12px 40px rgba(78,55,137,.07); }
+        .cat-head { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:16px; }
+        .cat-title { margin:0; color:#4d399c; font-size:23px; font-weight:950; }
+        .cat-sub { margin:4px 0 0; color:#68709c; font-size:12px; font-weight:700; }
+        .view-label { color:#099b98; font-size:12px; font-weight:900; white-space:nowrap; }
+        .items-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(178px,1fr)); gap:14px; }
+        .item-card { overflow:hidden; border-radius:20px; background:var(--card); border:1px solid rgba(117,87,199,.12); box-shadow:0 8px 25px rgba(65,45,125,.06); transition:transform .22s ease,box-shadow .22s ease; }
+        .item-card:hover { transform:translateY(-5px); box-shadow:0 16px 38px rgba(65,45,125,.13); }
+        .item-img { width:100%; height:142px; object-fit:cover; display:block; background:#eee5ff; }
+        .item-body { padding:13px; }
+        .item-name { font-size:14px; font-weight:900; min-height:35px; }
+        .item-desc { color:#6a7091; font-size:10.5px; line-height:1.45; margin-top:4px; min-height:31px; }
+        .item-bottom { margin-top:12px; display:flex; align-items:center; justify-content:space-between; gap:7px; }
+        .price { color:#553ea4; font-size:15px; font-weight:950; }
+        .price small { display:block; color:#8186a5; font-size:9px; font-weight:800; margin-bottom:2px; }
+        .add-btn { border:0; cursor:pointer; color:white; background:linear-gradient(100deg,#0b9f9c,#22c8c0); font-weight:900; font-size:11px; padding:8px 13px; border-radius:999px; box-shadow:0 7px 16px rgba(11,159,156,.18); }
+        .add-btn:hover { transform:translateY(-1px); filter:brightness(1.05); }
+        .cart { position:sticky; top:96px; background:rgba(255,255,255,.9); border:1px solid rgba(117,87,199,.16); border-radius:28px; padding:18px; box-shadow:0 18px 55px rgba(71,49,128,.13); }
+        .cart-title-row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+        .cart-title { margin:0; font-size:21px; color:#4d399c; }
+        .cart-count { min-width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#d9fffc;color:#087d79;font-size:12px;font-weight:950; }
+        .cart-empty { padding:32px 8px; text-align:center; color:#777c9e; font-size:13px; line-height:1.6; }
+        .cart-items { margin-top:14px; max-height:440px; overflow:auto; }
+        .cart-item { display:grid; grid-template-columns:54px 1fr auto; gap:10px; align-items:center; padding:12px 0; border-bottom:1px solid #eee9fa; }
+        .cart-item img { width:54px;height:54px;object-fit:cover;border-radius:13px; }
+        .cart-name { font-size:12px;font-weight:900;line-height:1.3; }
+        .cart-price { color:#665aa0;font-size:11px;font-weight:800;margin-top:3px; }
+        .qty { display:flex;align-items:center;gap:6px;margin-top:7px; }
+        .qty button { width:24px;height:24px;border:1px solid #d8d1ef;background:#fff;border-radius:7px;cursor:pointer;font-weight:900;color:#57449e; }
+        .qty span { min-width:16px;text-align:center;font-size:11px;font-weight:900; }
+        .remove { border:0;background:transparent;color:#d85c87;cursor:pointer;font-size:11px;font-weight:900; padding:5px; }
+        .cart-total { display:flex;justify-content:space-between;gap:10px;margin-top:16px;padding-top:14px;border-top:2px dashed #d9d0f0;font-size:15px;font-weight:950; }
+        .cart-note { color:#7a7e9d;font-size:10px;margin-top:7px;line-height:1.5; }
+        .cart-wa { width:100%;margin-top:13px; }
+        .continue { width:100%;margin-top:9px;border:0;background:transparent;color:#6355a1;font-weight:800;cursor:pointer;padding:8px; }
+        .features { max-width:1220px;margin:auto;padding:0 22px 70px; }
+        .features h2 { color:#4b389c;text-align:center;font-size:32px;margin:0 0 18px; }
+        .feature-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:14px; }
+        .feature { background:rgba(255,255,255,.68);border:1px solid rgba(117,87,199,.13);border-radius:23px;padding:20px;min-height:120px; }
+        .feature-icon { font-size:27px; } .feature h3 { margin:9px 0 5px;font-size:15px; } .feature p { margin:0;color:#6a7091;font-size:12px;line-height:1.5; }
+        .footer { position:relative;z-index:1;background:linear-gradient(120deg,rgba(117,87,199,.95),rgba(11,159,156,.94));color:white;padding:42px 22px; }
+        .footer-inner { max-width:1220px;margin:auto;text-align:center; }
+        .footer h2 { margin:0 0 7px;font-size:27px; } .footer p { margin:5px 0;color:rgba(255,255,255,.88);font-size:13px; }
+        .social { display:flex;justify-content:center;gap:10px;margin-top:16px; } .social a { color:#fff;text-decoration:none;background:rgba(255,255,255,.16);padding:9px 13px;border-radius:999px;font-weight:850;font-size:12px; }
+        .mobile-cart { display:none; }
+        @media (max-width:980px) { .hero{grid-template-columns:1fr}.menu-layout{grid-template-columns:1fr}.cart{position:fixed;right:14px;bottom:14px;top:auto;width:min(390px,calc(100vw - 28px));max-height:78vh;z-index:40;display:${cartOpen ? 'block' : 'none'};overflow:auto}.mobile-cart{display:flex;position:fixed;right:18px;bottom:18px;z-index:35;border:0;cursor:pointer;background:#4d399c;color:white;padding:13px 17px;border-radius:999px;font-weight:950;box-shadow:0 14px 35px rgba(71,49,128,.28)}.navlinks{display:none}.feature-grid{grid-template-columns:1fr 1fr} }
+        @media (max-width:620px) { .nav{padding:9px 14px}.brand img{width:50px;height:50px}.brand-title{font-size:15px}.brand-sub{font-size:9px}.nav .whatsapp{padding:10px 12px;font-size:11px}.hero{padding:28px 14px 20px}.hero-copy{padding:26px 22px;border-radius:25px}.hero h1{font-size:43px}.hero p{font-size:14px}.hero-art{min-height:310px}.menu-wrap,.features{padding-left:14px;padding-right:14px}.menu-heading h2{font-size:34px}.menu-heading p{font-size:14px}.category{padding:15px;border-radius:22px}.items-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.item-img{height:118px}.item-body{padding:10px}.item-name{font-size:12px}.item-desc{font-size:9.5px}.item-bottom{align-items:flex-end}.price{font-size:13px}.add-btn{font-size:10px;padding:7px 10px}.feature-grid{grid-template-columns:1fr}.cart{width:calc(100vw - 24px);right:12px}.cart-items{max-height:35vh} }
       `}</style>
 
-      <header className={hideHeader ? 'hide' : ''}>
-        <div className="brand">
-          <img src="/blr99/logo.png" alt="BLR 99 Corner" />
-          <div>
-            <div className="brand-title">BLR 99 CORNER</div>
-            <div className="brand-sub">100% VEG • Icecream Boutique</div>
-          </div>
-        </div>
+      <div className="content">
+        <header className="topbar">
+          <nav className="nav">
+            <a className="brand" href="#home">
+              <img src="/blr99/logo.png" alt="BLR 99 Corner" onError={(e) => { e.currentTarget.src = '/logo.png'; }} />
+              <span><div className="brand-title">BLR 99 CORNER</div><div className="brand-sub">100% VEG • Icecream Boutique</div></span>
+            </a>
+            <div className="navlinks"><a href="#home">Home</a><a href="#menu">Menu</a><a href="#about">About</a><a href="#contact">Contact</a></div>
+            <button className="whatsapp" onClick={orderOnWhatsApp} disabled={!cart.length} style={{ opacity: cart.length ? 1 : .75 }}>
+              💬 Order on WhatsApp {cart.length ? `(${cartCount})` : ''}
+            </button>
+          </nav>
+        </header>
 
-        <nav aria-label="Main navigation">
-          <a href="#home">Home</a>
-          <a href="#menu">Menu</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-          <a className="wa" href={order()} target="_blank" rel="noreferrer">Order on WhatsApp!</a>
-        </nav>
-      </header>
-
-      <section id="home" className="hero">
-        <div className="hero-inner">
+        <section id="home" className="hero">
           <div className="hero-copy">
-            <span className="eyebrow">100% VEG • FRESH ALWAYS</span>
-            <h1>Scoops of Happiness,<br /><span>Right at the Corner.</span></h1>
-            <p>Icecreams, waffles, sandwiches, burgers, milkshakes and sundaes — made fresh for every kind of sweet moment.</p>
-            <div className="hero-actions">
-              <a className="btn primary" href="#menu">Explore Our Menu ↓</a>
-              <a className="btn secondary" href={order()} target="_blank" rel="noreferrer">📲 Order on WhatsApp</a>
-            </div>
+            <span className="eyebrow">100% VEG • FRESHLY MADE • HAPPY VIBES</span>
+            <h1>Your Cravings.<br /><span>Your Happy Place.</span></h1>
+            <p>From creamy scoops and dreamy sundaes to crispy fries, loaded waffles, burgers, sandwiches and refreshing milkshakes — there is something delicious waiting for everyone at BLR 99 Corner.</p>
+            <div className="hero-actions"><a className="whatsapp" href="#menu">🍦 Explore Our Menu</a><a className="outline" href={`tel:${phone}`}>📞 +91 98860-67444</a></div>
           </div>
-          <div>
-            <img className="hero-logo" src="/blr99/logo.png" alt="BLR 99 Corner logo" />
+          <div className="hero-art">
+            <div className="hero-bubble bubble-one">Life is better with ice cream 🍨</div>
+            <img src={cdn('photo-1563805042-7684c019e1cb')} alt="Delicious ice cream" />
+            <div className="hero-bubble bubble-two">Scoop • Sip • Bite • Repeat!</div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="menu">
-        <div className="section-wrap">
-          <h2 className="section-title">Our Menu</h2>
-          <p className="section-lead">Scoop. Sip. Bite. Play. Repeat! 🎉
-Whether you’re here for a quick scoop, a loaded sundae, a cheesy bite or a fun hangout with friends and family, BLR 99 Corner has something delicious waiting for you.
+        <section id="menu" className="menu-wrap">
+          <div className="menu-heading">
+            <h2>Our Menu 🍦</h2>
+            <p><strong>More Than Just Ice Cream — It’s a Whole Lot of Happiness!</strong><br />Pick your favourite, make it your own, and enjoy every sweet moment at BLR 99 Corner. Add your favourites to the cart and send the complete order straight to WhatsApp.</p>
+          </div>
 
-Come hungry. Leave happy! 💚🍨.</p>
-
-          {Object.entries(menu).map(([category, items]) => (
-            <div className="menu-category" key={category}>
-              <div className="cat-title">{category}</div>
-              {category === 'Sandwiches 🥪' && <div className="cat-note">Grilled to perfection, made for you!</div>}
-              {category === 'Burgers 🍔' && <div className="cat-note">Big bites, bigger smiles!</div>}
-              {category === 'French Fries 🍟' && <div className="cat-note">Crispy. Golden. Irresistible!</div>}
-              {category === 'Waffle Mixes 🧇' && <div className="cat-note">Crispy Waffles, Sweet Happiness! • With / Without Icecream</div>}
-
-              <div className="menu-grid">
-                {items.map(([name, price, doublePrice, desc, img]) => (
-                  <article className="card" key={name}>
-                    <div className="card-img">
-                      <img src={`/blr99/${img}`} alt={name} />
-                    </div>
-                    <div className="card-body">
-                      <div className="name">{name}</div>
-                      <div className="desc">{desc}</div>
-                      <div className="price-row">
-                        <div className="price">
-                          {doublePrice ? (
-                            <>
-                              <small>With icecream</small>{price} <span style={{opacity:.45}}>/</span> {doublePrice}
-                              <small style={{marginTop:3}}>Without icecream</small>
-                            </>
-                          ) : (
-                            <>{price}</>
-                          )}
+          <div className="menu-layout">
+            <div className="categories">
+              {Object.entries(menu).map(([category, items]) => (
+                <section className="category" key={category}>
+                  <div className="cat-head">
+                    <div><h3 className="cat-title">{category}</h3><p className="cat-sub">{categorySubtitles[category]}</p></div>
+                    <span className="view-label">{items.length} choices →</span>
+                  </div>
+                  <div className="items-grid">
+                    {items.map((item) => (
+                      <article className="item-card" key={item.name}>
+                        <img className="item-img" src={item.img} alt={item.name} loading="lazy" onError={(e) => { e.currentTarget.src = '/blr99/logo.png'; }} />
+                        <div className="item-body">
+                          <div className="item-name">{item.name}</div>
+                          <div className="item-desc">{item.desc}</div>
+                          <div className="item-bottom">
+                            <div className="price">
+                              <small>{item.doublePrice ? 'Single Scoop' : 'Price'}</small>
+                              ₹{item.price}{item.doublePrice ? ` / ₹${item.doublePrice}` : ''}
+                            </div>
+                            <button className="add-btn" onClick={() => addToCart(item)}>+ Add</button>
+                          </div>
                         </div>
-                        <a className="add" href={order(name)} target="_blank" rel="noreferrer">Add +</a>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              ))}
+
+              <div style={{ marginTop:10, padding:'18px 22px', borderRadius:20, background:'rgba(255,250,235,.9)', border:'2px dashed #b49ae9', textAlign:'center', color:'#5b4c93' }}>
+                <strong>⭐ TOPPINGS EXTRA CHARGES APPLY ⭐</strong><br />
+                <span style={{ fontSize:13, fontWeight:800 }}>🍦 CONE ₹15 &nbsp; | &nbsp; 🧇 WAFFLE CONE ₹15</span>
+              </div>
+            </div>
+
+            <aside className="cart" id="cart">
+              <div className="cart-title-row"><h3 className="cart-title">🛒 Your Cart</h3><span className="cart-count">{cartCount}</span></div>
+              {!cart.length ? (
+                <div className="cart-empty">Your cart is waiting for something delicious! 🍨<br />Click <strong>+ Add</strong> on any menu item.</div>
+              ) : (
+                <>
+                  <div className="cart-items">
+                    {cart.map((item) => (
+                      <div className="cart-item" key={item.name}>
+                        <img src={item.img} alt="" />
+                        <div>
+                          <div className="cart-name">{item.name}</div>
+                          <div className="cart-price">₹{item.price} × {item.qty} = ₹{item.price * item.qty}</div>
+                          <div className="qty"><button onClick={() => changeQty(item.name, -1)} aria-label={`Decrease ${item.name}`}>−</button><span>{item.qty}</span><button onClick={() => changeQty(item.name, 1)} aria-label={`Increase ${item.name}`}>+</button></div>
+                        </div>
+                        <button className="remove" onClick={() => removeFromCart(item.name)} aria-label={`Remove ${item.name}`}>✕ Remove</button>
                       </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          ))}
-
-          <div style={{maxWidth:650,margin:'0 auto',background:'#fff5d6',border:'2px dashed #d49a24',borderRadius:20,padding:'18px 22px',textAlign:'center'}}>
-            <strong style={{color:'#8f2c27'}}>⭐ TOPPINGS EXTRA CHARGES APPLY ⭐</strong>
-            <div style={{marginTop:8,fontWeight:850}}>🍦 CONE ₹15 &nbsp; | &nbsp; 🧇 WAFFLE CONE ₹15</div>
+                    ))}
+                  </div>
+                  <div className="cart-total"><span>Subtotal</span><span>₹{subtotal}</span></div>
+                  <div className="cart-note">Prices shown are menu prices. Ice-cream items are added as single scoops; double-scoop pricing is shown on the menu.</div>
+                  <button className="whatsapp cart-wa" onClick={orderOnWhatsApp}>💬 Order on WhatsApp</button>
+                  <button className="continue" onClick={() => setCartOpen(false)}>← Continue shopping</button>
+                </>
+              )}
+            </aside>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="features">
-        <div className="section-wrap">
-          <h2 className="section-title">More Reasons to Visit</h2>
-          <p className="section-lead">More than dessert — BLR 99 Corner is a place to play, relax, connect and make sweet memories.</p>
+        <section id="about" className="features">
+          <h2>More Sweet Experiences ✨</h2>
           <div className="feature-grid">
-            {features.map(([icon,title,p1,p2]) => (
-              <article className="feature" key={title}>
-                <div className="feature-icon">{icon}</div>
-                <h3>{title}</h3>
-                <p>{p1}</p>
-                <p>{p2}</p>
-              </article>
-            ))}
+            <div className="feature"><div className="feature-icon">🐾</div><h3>Treat Your Pets</h3><p>Pet-friendly treats for your four-legged companions.</p></div>
+            <div className="feature"><div className="feature-icon">🧸</div><h3>Kids’ Play Area</h3><p>A fun little space where kids can explore and play.</p></div>
+            <div className="feature"><div className="feature-icon">🎮</div><h3>Play & Win Free Ice Cream</h3><p>Challenge yourself and win your favourite ice cream for FREE!</p></div>
+            <div className="feature"><div className="feature-icon">📲</div><h3>Join Our WhatsApp Community</h3><p>Get exclusive discounts, exciting offers and special treats.</p></div>
+            <div className="feature"><div className="feature-icon">🎯</div><h3>Games for Adults</h3><p>Challenge your friends, test your skills and enjoy exciting games.</p></div>
+            <div className="feature"><div className="feature-icon">🍨</div><h3>Sugar-Free Ice Cream</h3><p>A delicious treat without the added sugar.</p></div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="about" className="about">
-        <div className="section-wrap">
-          <div className="about-grid">
-            <div>
-              <h2>Made for Happiness. 🍨</h2>
-              <p>BLR 99 Corner brings together fresh vegetarian treats, playful experiences and a warm neighbourhood vibe. Come in for a scoop, stay for the smiles.</p>
-              <div className="social">
-                <a href="https://www.instagram.com/blr99corner" target="_blank" rel="noreferrer">Instagram @blr99corner</a>
-                <a href="https://www.facebook.com/blr99corner" target="_blank" rel="noreferrer">Facebook /blr99corner</a>
-              </div>
-            </div>
-            <div className="info-card" id="contact">
-              <h3 style={{marginTop:0,color:'#ffe3a3'}}>Visit / Contact</h3>
-              <p>🚗 Drive-In Service Available</p>
-              <p>🛵 Free Home Delivery</p>
-              <p>📞 +91 98860-67444</p>
-              <p>🌐 www.blr99corner.com</p>
-              <p>📍 #41, A.J.Chambers, RV Road, Basavanagudi, Bangalore-560004</p>
-              <a className="btn" style={{background:'#25d366',color:'#073d2c',marginTop:7}} href={order()} target="_blank" rel="noreferrer">Join WhatsApp / Order</a>
-            </div>
+        <footer id="contact" className="footer">
+          <div className="footer-inner">
+            <h2>Good Food. Happy Mood. 💜</h2>
+            <p>🚗 Drive-In Service Available (After 8 P.M) &nbsp; • &nbsp; 🛵 Free Home Delivery</p>
+            <p>#41, A.J. Chambers, RV Road, Basavanagudi, Bangalore-560004</p>
+            <p>📞 +91 98860-67444 &nbsp; • &nbsp; 🌐 www.blr99corner.com</p>
+            <div className="social"><a href="https://www.instagram.com/blr99corner" target="_blank" rel="noreferrer">Instagram @blr99corner</a><a href="https://www.facebook.com/blr99corner" target="_blank" rel="noreferrer">Facebook /blr99corner</a></div>
+            <p style={{ marginTop:18, opacity:.75 }}>© 2026 BLR 99 Corner</p>
           </div>
-        </div>
-      </section>
+        </footer>
+      </div>
 
-      <footer>
-        <strong>Life is short, Make it Sweet! 💚</strong>
-        <div style={{marginTop:8}}>Treat yourself today!</div>
-        <div className="footer-social">
-          <a href="https://www.instagram.com/blr99corner" target="_blank" rel="noreferrer">📸 @blr99corner</a>
-          <a href="https://www.facebook.com/blr99corner" target="_blank" rel="noreferrer">f /blr99corner</a>
-        </div>
-        <div style={{marginTop:18,fontSize:12,opacity:.75}}>© 2026 BLR 99 Corner • 100% VEG • Icecream Boutique</div>
-      </footer>
-
-      <img className="watermark" src="/blr99/logo.png" alt="" />
+      <button className="mobile-cart" onClick={() => setCartOpen((open) => !open)}>🛒 Cart {cartCount ? `(${cartCount}) • ₹${subtotal}` : ''}</button>
     </main>
   );
 }
