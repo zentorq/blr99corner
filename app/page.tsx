@@ -187,7 +187,7 @@ export default function Page() {
               </div>
             </div>
           ))}
-          <footer style={{ textAlign: 'center', padding: '50px 0 100px', opacity: 0.7, fontSize: 17, color: '#d2691e' }}>
+          <footer style={{ textAlign: 'center', padding: '50px 0 100px', opacity: 0.7, fontSize: 17, color: '#000000' }}>
             🚗 Drive-In (after 8 P.M) | 🛵 Free Delivery | 🌐 www.blr99corner.com<br />
             © 2026 BLR 99 Corner • #41, A.J.Chambers, RV Road, Basavanagudi, Bangalore-560004<br />📞 +91 98860-67444
           </footer>
