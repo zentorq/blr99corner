@@ -107,6 +107,7 @@ const allItems = Object.values(menu).flat();
 export default function Page() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [activePage, setActivePage] = useState<'home' | 'about'>('home');
 
   const cartCount = useMemo(() => cart.reduce((sum, item) => sum + item.qty, 0), [cart]);
   const subtotal = useMemo(() => cart.reduce((sum, item) => sum + item.price * item.qty, 0), [cart]);
@@ -160,6 +161,28 @@ export default function Page() {
         .site-shell:before { content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.52; background-image:radial-gradient(circle at 8% 15%,rgba(117,87,199,.28) 0 70px,transparent 71px),radial-gradient(circle at 92% 20%,rgba(93,231,224,.34) 0 100px,transparent 101px),radial-gradient(circle at 78% 88%,rgba(117,87,199,.22) 0 80px,transparent 81px),linear-gradient(120deg,transparent 0 46%,rgba(255,255,255,.48) 46.2% 46.7%,transparent 47% 100%); }
         .site-shell:after { content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.10; background:linear-gradient(135deg,rgba(117,87,199,.75),rgba(93,231,224,.55)),url('https://images.unsplash.com/photo-1554118811-1e0d58224f31?auto=format&fit=crop&w=1800&q=70') center/cover no-repeat; mix-blend-mode:multiply; }
         .content { position:relative; z-index:1; }
+        .about-page { max-width:1220px; margin:auto; padding:58px 22px 80px; }
+        .about-hero { background:rgba(255,255,255,.82); border:1px solid rgba(117,87,199,.16); border-radius:34px; padding:44px; box-shadow:0 22px 65px rgba(80,56,145,.12); text-align:center; }
+        .about-hero h1 { margin:14px 0 12px; color:#4b389c; font-size:clamp(38px,5vw,60px); letter-spacing:-.04em; }
+        .about-hero p { max-width:820px; margin:0 auto; color:#5c628c; font-size:16px; line-height:1.75; }
+        .about-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:22px; }
+        .about-card { background:rgba(255,255,255,.78); border:1px solid rgba(117,87,199,.14); border-radius:25px; padding:25px; box-shadow:0 12px 40px rgba(78,55,137,.08); }
+        .about-card .about-icon { font-size:34px; }
+        .about-card h3 { margin:10px 0 7px; color:#4d399c; font-size:18px; }
+        .about-card p { margin:0; color:#686f96; font-size:13px; line-height:1.65; }
+        .about-story { margin-top:22px; display:grid; grid-template-columns:.9fr 1.1fr; gap:22px; align-items:stretch; }
+        .about-image { min-height:360px; border-radius:30px; overflow:hidden; box-shadow:0 18px 50px rgba(71,49,128,.12); }
+        .about-image img { width:100%; height:100%; object-fit:cover; display:block; }
+        .about-copy { background:rgba(255,255,255,.78); border:1px solid rgba(117,87,199,.14); border-radius:30px; padding:32px; }
+        .about-copy h2 { margin:0 0 12px; color:#4d399c; font-size:30px; }
+        .about-copy p { color:#686f96; line-height:1.75; font-size:14px; margin:0 0 12px; }
+        .about-points { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
+        .about-point { background:linear-gradient(135deg,#f0e9ff,#e1fffc); border-radius:15px; padding:12px; font-size:12px; font-weight:850; color:#51449a; }
+        .about-actions { margin-top:24px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+        .nav-button { border:0; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:13px; padding:10px 12px; border-radius:999px; cursor:pointer; }
+        .nav-button:hover { background:#e4faf8; }
+        @media (max-width:980px) { .about-grid{grid-template-columns:1fr 1fr}.about-story{grid-template-columns:1fr} }
+        @media (max-width:620px) { .about-page{padding:28px 14px 60px}.about-hero{padding:28px 21px;border-radius:25px}.about-hero p{font-size:14px}.about-grid{grid-template-columns:1fr}.about-copy{padding:25px}.about-points{grid-template-columns:1fr}.about-image{min-height:270px} }
         .topbar { position:sticky; top:0; z-index:30; backdrop-filter:blur(18px); background:rgba(250,247,255,.88); border-bottom:1px solid rgba(117,87,199,.16); box-shadow:0 8px 30px rgba(74,50,130,.08); }
         .nav { max-width:1220px; margin:auto; min-height:78px; padding:10px 22px; display:flex; align-items:center; justify-content:space-between; gap:18px; }
         .brand { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--ink); }
@@ -243,17 +266,19 @@ export default function Page() {
       <div className="content">
         <header className="topbar">
           <nav className="nav">
-            <a className="brand" href="#home">
+            <a className="brand" href="#home" onClick={() => setActivePage('home')}>
               <img src="/blr99/logo.png" alt="BLR 99 Corner" onError={(e) => { e.currentTarget.src = '/logo.png'; }} />
               <span><div className="brand-title">BLR 99 CORNER</div><div className="brand-sub">100% VEG • Icecream Boutique</div></span>
             </a>
-            <div className="navlinks"><a href="#home">Home</a><a href="#menu">Menu</a><a href="#about">About</a><a href="#contact">Contact</a></div>
+            <div className="navlinks"><button className="nav-button" onClick={() => setActivePage('home')}>Home</button><a href="#menu" onClick={() => setActivePage('home')}>Menu</a><button className="nav-button" onClick={() => setActivePage('about')}>About</button><a href="#contact" onClick={() => setActivePage('home')}>Contact</a></div>
             <button className="whatsapp" onClick={orderOnWhatsApp} disabled={!cart.length} style={{ opacity: cart.length ? 1 : .75 }}>
               💬 Order on WhatsApp {cart.length ? `(${cartCount})` : ''}
             </button>
           </nav>
         </header>
 
+        {activePage === 'home' ? (
+          <>
         <section id="home" className="hero">
           <div className="hero-copy">
             <span className="eyebrow">100% VEG • FRESHLY MADE • HAPPY VIBES</span>
@@ -350,10 +375,54 @@ export default function Page() {
           </div>
         </section>
 
+          </>
+        ) : (
+          <section className="about-page" id="about">
+            <div className="about-hero">
+              <span className="eyebrow">WELCOME TO BLR 99 CORNER</span>
+              <h1>About Us 💜🍦</h1>
+              <p>We believe an ice cream café should be more than a place to grab a scoop — it should be a happy little corner where families, friends and food lovers can relax, connect and create sweet memories.</p>
+              <div className="about-actions">
+                <button className="whatsapp" onClick={() => setActivePage('home')}>🍨 Explore Our Menu</button>
+                <a className="outline" href={`tel:${phone}`}>📞 Call BLR 99 Corner</a>
+              </div>
+            </div>
+
+            <div className="about-grid">
+              <div className="about-card"><div className="about-icon">🍨</div><h3>Made for Sweet Moments</h3><p>From classic scoops to indulgent sundaes, waffles and milkshakes, our menu is created for those little moments that deserve something delicious.</p></div>
+              <div className="about-card"><div className="about-icon">🥪</div><h3>More Than Ice Cream</h3><p>Craving something savoury? Enjoy our sandwiches, burgers and crispy fries alongside your favourite sweet treats.</p></div>
+              <div className="about-card"><div className="about-icon">🎮</div><h3>A Place to Hang Out</h3><p>Enjoy our café experience with kids’ play, games, community moments and a relaxed atmosphere for friends and family.</p></div>
+            </div>
+
+            <div className="about-story">
+              <div className="about-image"><img src={cdn('photo-1554118811-1e0d58224f31')} alt="Warm and welcoming café interior" loading="lazy" /></div>
+              <div className="about-copy">
+                <h2>Our Happy Corner</h2>
+                <p>BLR 99 Corner is designed around one simple idea: <strong>good food should put a smile on your face.</strong> Whether you drop in for a quick scoop, meet friends for a milkshake, bring the family for a sundae or stop by for a savoury bite, we want every visit to feel easy, cheerful and memorable.</p>
+                <p>We are proudly <strong>100% VEG</strong> and bring together sweet cravings, savoury favourites and fun experiences under one roof.</p>
+                <div className="about-points">
+                  <div className="about-point">🌱 100% Vegetarian</div>
+                  <div className="about-point">🍦 Fresh &amp; Delicious</div>
+                  <div className="about-point">👨‍👩‍👧‍👦 Family Friendly</div>
+                  <div className="about-point">💜 Made with Happiness</div>
+                  <div className="about-point">🛵 Free Home Delivery</div>
+                  <div className="about-point">🚗 Drive-In Service</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="about-grid" style={{ marginTop: 22 }}>
+              <div className="about-card"><div className="about-icon">🐾</div><h3>Treat Your Pets</h3><p>We love making the experience enjoyable for the whole family, including your four-legged companions.</p></div>
+              <div className="about-card"><div className="about-icon">🧸</div><h3>Kids’ Play Area</h3><p>A fun space for little ones to play while families enjoy their time together.</p></div>
+              <div className="about-card"><div className="about-icon">📲</div><h3>Stay Connected</h3><p>Join our WhatsApp community and follow @blr99corner for offers, updates and sweet surprises.</p></div>
+            </div>
+          </section>
+        )}
+
         <footer id="contact" className="footer">
           <div className="footer-inner">
             <h2>Good Food. Happy Mood. 💜</h2>
-            <p>🚗 Drive-In Service Available (After 8 P.M) &nbsp; • &nbsp; 🛵 Free Home Delivery</p>
+            <p>🚗 Drive-In Service Available &nbsp; • &nbsp; 🛵 Free Home Delivery</p>
             <p>#41, A.J. Chambers, RV Road, Basavanagudi, Bangalore-560004</p>
             <p>📞 +91 98860-67444 &nbsp; • &nbsp; 🌐 www.blr99corner.com</p>
             <div className="social"><a href="https://www.instagram.com/blr99corner" target="_blank" rel="noreferrer">Instagram @blr99corner</a><a href="https://www.facebook.com/blr99corner" target="_blank" rel="noreferrer">Facebook /blr99corner</a></div>
